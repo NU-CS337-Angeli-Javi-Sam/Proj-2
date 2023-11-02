@@ -1,13 +1,13 @@
-from typing import Optional
+from typing import Any, Optional
 
 
 class Node:
-    def __init__(self, data: any):
+    def __init__(self, data: Any):
         self.__data = data
         self.__next = None
         self.__prev = None
 
-    def get_data(self) -> any:
+    def get_data(self) -> Any:
         return self.__data
 
     def get_next(self) -> Optional["Node"]:

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 from data_structures.Node import Node
 
 class DoublyLinkedList:
@@ -109,7 +109,7 @@ class DoublyLinkedList:
 
         return curr_node
 
-    def get_data_at(self, index: int) -> any:
+    def get_data_at(self, index: int) -> Any:
         node = self.get_node_at(index)
         return node.get_data()
 
