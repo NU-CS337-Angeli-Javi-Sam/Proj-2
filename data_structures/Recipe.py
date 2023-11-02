@@ -28,5 +28,14 @@ class Recipe:
         }
         self.__ingredients[name] = ingredient_data
 
+    def get_ingredient_info(self, ingredient: str) -> dict:
+        return self.get_ingredients()[ingredient]
+
+    def get_ingredient_quantity(self, ingredient: str) -> float:
+        return self.get_ingredient_info(ingredient)["quantity"]
+
+    def get_ingredient_metric(self, ingredient: str) -> str:
+        return self.get_ingredient_info(ingredient)["metric"]
+
     def add_instruction(self, instruction: str) -> None:
         self.__instructions.append(instruction)
