@@ -1,6 +1,6 @@
-from data_structures.ontologies.cooking_actions import CookingActionsOntology
-from data_structures.ontologies.cooking_tools import CookingToolsOntology
-from data_structures.ontologies.ingredients import IngredientOntology
+from data_structures.ontologies.CookingActions import CookingActionsOntology
+from data_structures.ontologies.CookingTools import CookingToolsOntology
+from data_structures.ontologies.Ingredients import IngredientOntology
 
 
 class RecipeRelationships:
