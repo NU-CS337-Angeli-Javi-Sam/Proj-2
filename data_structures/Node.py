@@ -1,23 +1,26 @@
+from typing import Optional
+
+
 class Node:
-    def __init__(self, data):
+    def __init__(self, data: any):
         self.__data = data
         self.__next = None
         self.__prev = None
 
-    def get_data(self):
+    def get_data(self) -> any:
         return self.__data
 
-    def get_next(self):
+    def get_next(self) -> Optional["Node"]:
         return self.__next
 
-    def get_prev(self):
+    def get_prev(self)-> Optional["Node"]:
         return self.__prev
 
-    def set_data(self, data):
+    def set_data(self, data: Optional["Node"]) -> None:
         self.__data = data
 
-    def set_next(self, node):
+    def set_next(self, node: Optional["Node"]) -> None:
         self.__next = node
 
-    def set_prev(self, node):
+    def set_prev(self, node: Optional["Node"]) -> None:
         self.__prev = node

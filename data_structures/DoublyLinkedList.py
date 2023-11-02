@@ -1,12 +1,13 @@
+from typing import Optional
 from data_structures.Node import Node
 
 class DoublyLinkedList:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__head = None
         self.__tail = None
         self.__length = 0
 
-    def __str__(self):
+    def __str__(self) -> str:
         curr_node = self.get_head()
         output = ""
         while curr_node:
@@ -16,34 +17,31 @@ class DoublyLinkedList:
         output += "None"
         return output
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.get_length()
 
-    def get_head(self):
+    def get_head(self) -> Optional["Node"]:
         return self.__head
 
-    def get_tail(self):
+    def get_tail(self) -> Optional["Node"]:
         return self.__tail
 
-    def get_length(self):
+    def get_length(self) -> int:
         return self.__length
 
-    def __set_head(self, node):
+    def __set_head(self, node: Optional["Node"]) -> None:
         self.__head = node
 
-    def __set_tail(self, node):
+    def __set_tail(self, node: Optional["Node"]) -> None:
         self.__tail = node
 
-    def __set_length(self, length):
+    def __set_length(self, length: int) -> None:
         self.__length = length
 
-    def __increment_length(self):
+    def __increment_length(self) -> None:
         self.__set_length(self.__length + 1)
 
-    def __decrement_length(self):
-        self.__set_length(self.__length - 1)
-
-    def push(self, data):
+    def push(self, data: Optional["Node"]) -> None:
         new_node = Node(data)
 
         if self.get_head() is None:
@@ -58,7 +56,7 @@ class DoublyLinkedList:
         self.__set_head(new_node)
         self.__increment_length()
 
-    def append(self, data):
+    def append(self, data: Optional["Node"]) -> None:
         new_node = Node(data)
 
         if self.get_head() is None:
@@ -73,7 +71,7 @@ class DoublyLinkedList:
         self.__set_tail(new_node)
         self.__increment_length()
 
-    def insertAt(self, data, index):
+    def insertAt(self, data: Optional["Node"], index: int) -> None:
 
         if index < 0 or index > self.get_length():
             raise IndexError("Index is out of range")
@@ -99,7 +97,7 @@ class DoublyLinkedList:
         new_node.set_next(curr_node)
         self.__increment_length()
 
-    def get_node_at(self, index):
+    def get_node_at(self, index: int) -> None:
         if index < 0 or index > self.get_length():
             raise IndexError("Index is out of range")
 
@@ -111,16 +109,16 @@ class DoublyLinkedList:
 
         return curr_node
 
-    def get_data_at(self, index):
+    def get_data_at(self, index: int) -> any:
         node = self.get_node_at(index)
         return node.get_data()
 
-    def clear(self):
+    def clear(self) -> None:
         self.__set_head(None)
         self.__set_tail(None)
         self.__set_length(0)
 
-    def reverse(self):
+    def reverse(self) -> None:
         curr_node = self.get_head()
         self.__set_head(self.get_tail())
         self.__set_tail(curr_node)
