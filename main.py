@@ -1,4 +1,5 @@
 from data_structures.VirtualChef import VirtualChef
+from parsers.parse_instruction import parse_instruction
 from utils.create_recipe import create_recipe
 from utils.fetch_recipe import fetch_recipe
 from utils.html_parser import parse_html
@@ -10,14 +11,17 @@ if __name__ == "__main__":
     # url = 'https://www.epicurious.com/recipes/food/views/my-favorite-simple-roast-chicken-231348'
     url = 'https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe'
 
-    webpage_content = fetch_recipe(url)
+    # webpage_content = fetch_recipe(url)
 
-    parsed_html = parse_html(webpage_content)
+    # parsed_html = parse_html(webpage_content)
 
-    for key in parsed_html:
-        print(key)
-        print()
+    # for key in parsed_html:
+    #     print(key)
+    #     print()
 
-    recipe = create_recipe(parsed_html)
+    # recipe = create_recipe(parsed_html)
 
-    virtual_chef.set_recipe(recipe)
+    # virtual_chef.set_recipe(recipe)
+
+    sentence = 'chop onions with knife'
+    print(parse_instruction(sentence))

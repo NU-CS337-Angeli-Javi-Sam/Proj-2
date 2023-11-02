@@ -1,8 +1,12 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
+from data_structures.RecipeRelationships import RecipeRelationships
+from data_structures.ontologies.CookingActions import CookingActionsOntology
 
 class DependencyParser:
     def __init__(self, beam_width: int = 3):
         self.beam_width = beam_width
+        self.actions_ontology = CookingActionsOntology()
+        self.recipe_relationships = RecipeRelationships()
 
     def parse(self, sentence: str) -> List[Dict["str", "str"]]:
         words = sentence.split()
@@ -62,13 +66,28 @@ class DependencyParser:
         if stack:
             valid_actions.append('reduce')
 
-        # You can consider adding 'left-arc' action if there are at least two items on the stack.
-        if len(stack) >= 2:
-            valid_actions.append('left-arc')
+        # # You can consider adding 'left-arc' action if there are at least two items on the stack.
+        # if len(stack) >= 2:
+        #     valid_actions.append('left-arc')
 
-        # You can consider adding 'right-arc' action if there are at least two items on the stack.
-        if len(stack) >= 2:
-            valid_actions.append('right-arc')
+        # # You can consider adding 'right-arc' action if there are at least two items on the stack.
+        # if len(stack) >= 2:
+        #     valid_actions.append('right-arc')
+
+        if stack and buffer:
+            action = buffer[0]
+            if action in self.actions_ontology.categories:
+
+                ingredients = self.recipe_relationships.ingredient_for_action(action)
+                tools = self.recipe_relationships.tools_for_action(action)
+
+                if set(ingredients).intersection(stack):
+                    valid_actions.append(f'left-arc(INGREDIENT)')
+
+                if set(tools).intersection(stack):
+                    valid_actions.append(f'left-arc(TOOL)')
+
+                valid_actions.append(f'right-arc(ACTION)')
 
         return valid_actions
 
@@ -82,28 +101,35 @@ class DependencyParser:
         history = new_state['history']
 
         if action == 'shift':
-            # Apply the 'shift' action by moving the first word from the buffer to the stack.
             stack.append(buffer.pop(0))
         elif action == 'reduce':
-            # Apply the 'reduce' action by removing the top item from the stack.
             stack.pop()
-        elif action == 'left-arc':
-            # Apply the 'left-arc' action by adding a dependency relation from the second item on the stack to the first.
-            dependent = stack.pop()
-            head = stack[-1]
-            history.append(f'left-arc({head}, {dependent})')
-        elif action == 'right-arc':
-            # Apply the 'right-arc' action by adding a dependency relation from the first item on the stack to the second.
-            head = stack.pop()
-            dependent = stack[-1]
-            history.append(f'right-arc({head}, {dependent})')
-
-        # Update the state components in the new state.
-        new_state['stack'] = stack
-        new_state['buffer'] = buffer
-        new_state['history'] = history
+        elif action.startswith('left-arc') or action.startswith('right-arc'):
+            # Handle left-arc and right-arc actions.
+            relation, head, dependent = self.parse_action(action)
+            if relation == 'left-arc':
+                history.append(f'left-arc({head}, {dependent})')
+            else:
+                history.append(f'right-arc({head}, {dependent})')
+            # Update the state components in the new state.
+            new_state['stack'] = stack
+            new_state['buffer'] = buffer
+            new_state['history'] = history
 
         return new_state
+
+    def parse_action(self, action: str) -> Tuple[str, str, str]:
+        # Parse the action string to extract the relation, head, and dependent.
+        parts = action.split('(')
+        relation = parts[0]
+        args = parts[1][:-1]  # Remove the trailing parenthesis.
+
+        if relation == 'left-arc':
+            head, dependent = args.split(', ')
+        else:
+            dependent, head = args.split(', ')
+
+        return relation, head, dependent
 
     def score_state(self, state: Dict["str", Any]) -> float:
         # Initialize the score to a base value.
