@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className="h-screen w-screen bg-slate-700 flex flex-col">
         <header className="w-full flex justify-center text-4xl text-bold py-4 bg-slate-800 text-slate-100">Virtual Chef</header>
-        <main className="w-screen h-full flex justify-center items-center">{children}</main>
+        <main className="w-screen h-full flex flex-grow justify-center items-end text-lg pb-8">{children}</main>
       </body>
     </html>
   );
