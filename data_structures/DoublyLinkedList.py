@@ -6,6 +6,19 @@ class DoublyLinkedList:
         self.__tail = None
         self.__length = 0
 
+    def __str__(self):
+        curr_node = self.get_head()
+        output = ""
+        while curr_node:
+            output += f"{curr_node.get_data()} <-> "
+            curr_node = curr_node.get_next()
+
+        output += "None"
+        return output
+
+    def __len__(self):
+        return self.get_length()
+
     def get_head(self):
         return self.__head
 
@@ -116,19 +129,3 @@ class DoublyLinkedList:
             curr_node.set_next(curr_node.get_prev())
             curr_node.set_prev(temp)
             curr_node = curr_node.get_prev()
-
-
-
-
-    def __str__(self):
-        curr_node = self.get_head()
-        output = ""
-        while curr_node:
-            output += f"{curr_node.get_data()} <-> "
-            curr_node = curr_node.get_next()
-
-        output += "None"
-        return output
-
-    def __len__(self):
-        return self.get_length()
