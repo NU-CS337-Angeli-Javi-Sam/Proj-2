@@ -62,10 +62,6 @@ class DependencyParser:
         if buffer:
             valid_actions.append('shift')
 
-        # You can consider adding 'reduce' action if there are items on the stack.
-        if stack:
-            valid_actions.append('reduce')
-
         # # You can consider adding 'left-arc' action if there are at least two items on the stack.
         # if len(stack) >= 2:
         #     valid_actions.append('left-arc')
@@ -102,8 +98,6 @@ class DependencyParser:
 
         if action == 'shift':
             stack.append(buffer.pop(0))
-        elif action == 'reduce':
-            stack.pop()
         elif action.startswith('left-arc') or action.startswith('right-arc'):
             # Handle left-arc and right-arc actions.
             relation, head, dependent = self.parse_action(action)
