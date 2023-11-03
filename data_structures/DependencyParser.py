@@ -19,7 +19,7 @@ class DependencyParser:
         }
         beam = [initial_state]
 
-
+        best_state = None
         while beam:
             # Create a list to store new candidate states.
             new_beam = []
@@ -38,12 +38,14 @@ class DependencyParser:
                     # Add the new state to the candidate list.
                     new_beam.append(new_state)
 
+                    # Update best_state if the current state has a higher score
+                    if best_state is None or new_state['score'] > best_state['score']:
+                        best_state = new_state
+
             # Select the top-K states from the candidate list based on their scores.
             new_beam.sort(key=lambda x: x['score'], reverse=True)
             beam = new_beam[:self.beam_width]
 
-        # Choose the best state as the final parsing result.
-        best_state = max(beam, key=lambda x: x['score'])
 
         # Extract the dependency relations from the parsing history in the best state.
         dependencies = self.extract_dependencies(best_state['history'])
