@@ -8,7 +8,11 @@ class CookingToolsOntology:
             "Grilling Tools": ["grill", "tongs", "grill brush", "basting brush", "smoker box", "grill basket", "skewers", "heat-resistant gloves", "instant-read thermometer", "grill grates"],
             "Specialized Tools": ["sous-vide machine", "blowtorch", "microplane", "mortar and pestle", "pepper mill", "pasta maker", "thermometer", "food scale", "strainer", "mandoline slicer"],
         }
-        self.lexicon = {tool: category for category, tools in self.categories.items() for tool in tools}
+
+        self.lexicon = {}
+        for category, tools in self.categories.items():
+            for tool in tools:
+                self.lexicon[tool] = category
 
     def get_category(self, tool):
         return self.lexicon.get(tool, "Unknown")

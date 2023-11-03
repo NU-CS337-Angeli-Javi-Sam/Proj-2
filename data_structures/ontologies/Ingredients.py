@@ -12,7 +12,10 @@ class IngredientOntology:
             "Nuts and Seeds": ["almonds", "walnuts", "sunflower seeds", "flaxseeds", "cashews", "peanuts", "sesame seeds", "pumpkin seeds", "chia seeds", "pecans"],
             "Sweets and Desserts": ["sugar", "chocolate", "vanilla extract", "honey", "caramel", "marshmallows", "cookies", "cake", "ice cream", "candies"],
         }
-        self.lexicon = {ingredient: category for category, ingredients in self.categories.items() for ingredient in ingredients}
 
+        self.lexicon = {}
+        for category, ingredients in self.categories.items():
+            for ingredient in ingredients:
+                self.lexicon[ingredient] = category
     def get_category(self, ingredient):
         return self.lexicon.get(ingredient, "Unknown")

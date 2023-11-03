@@ -17,7 +17,11 @@ class CookingActionsOntology:
             "Serve": ["serve", "plate", "garnish"],
             "Prepare Ingredients": ["prep", "clean", "peel", "trim", "grate"],
         }
-        self.lexicon = { action: category for action, category in self.categories.items()}
+
+        self.lexicon = {}
+        for category, actions in self.categories.items():
+            for action in actions:
+                self.lexicon[action] = category
 
     def get_category(self, ingredient):
         return self.lexicon.get(ingredient, "Unknown")

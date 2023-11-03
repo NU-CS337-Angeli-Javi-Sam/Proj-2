@@ -23,5 +23,5 @@ if __name__ == "__main__":
 
     # virtual_chef.set_recipe(recipe)
 
-    sentence = 'chop onions with knife'
+    sentence = 'chop onion with knife'
     print(parse_instruction(sentence))
