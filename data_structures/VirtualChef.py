@@ -4,7 +4,7 @@ from data_structures.Recipe import Recipe
 class VirtualChef:
     def __init__(self) -> None:
         self.__recipe = Recipe()
-        self.__curr_step = 0
+        self.__curr_step = -1
         self.__curr_instruction = "Please enter the recipe you'd like my help with."
 
     def get_recipe(self) -> Recipe:
