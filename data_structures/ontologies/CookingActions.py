@@ -1,7 +1,7 @@
 class CookingActionsOntology:
     def __init__(self):
         self.categories = {
-            "Heat": ["bake", "boil", "broil", "simmer", "fry", "grill", "roast", "saute", "steam"],
+            "Heat": ["bake", "boil", "broil", "simmer", "fry", "grill", "roast", "saute", "steam", "sear"],
             "Prepare": ["chop", "dice", "mince", "slice", "grate", "peel", "trim", "shred"],
             "Mix": ["stir", "whisk", "blend", "fold", "knead"],
             "Bake": ["bake", "roast", "broil"],
@@ -9,7 +9,7 @@ class CookingActionsOntology:
             "Fry": ["fry", "deep-fry", "pan-fry"],
             "Grill": ["grill", "barbecue"],
             "Roast": ["roast", "bake"],
-            "Saute": ["saute", "pan-fry"],
+            "Saute": ["saute", "pan-fry", "sear"],
             "Steam": ["steam", "poach"],
             "Cut": ["chop", "dice", "mince", "slice", "grate"],
             "Mix": ["stir", "whisk", "blend", "fold", "knead"],
