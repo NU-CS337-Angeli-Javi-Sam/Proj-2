@@ -10,7 +10,7 @@ def create_recipe(recipe_data):
 
     recipe_name: str = recipe_data["name"]
     recipe_ingredients: List["str"] = recipe_data["recipeIngredient"]
-    recipe_instructions: List["str"] = recipe_data["recipeInstructions"]
+    recipe_instructions: List["str"] = []
 
 
     recipe_cook_time: str = recipe_data["cookTime"]
@@ -24,11 +24,19 @@ def create_recipe(recipe_data):
     print("Recipe: ", recipe_name)
     print()
 
-    print("Recipe Ingredients: ",recipe_ingredients)
+    print("Recipe Ingredients: ", recipe_ingredients)
     print()
 
-    print("Recipe Instructions: ",recipe_instructions)
-    print()
+    print("Recipe:")
+    count = 1
+    for instruction in recipe_data["recipeInstructions"]:
+        instruction_text = instruction["text"]
+        if instruction_text == None:
+            continue
+
+        recipe_instructions.append(instruction_text)
+        print(f"{count}) {instruction_text}")
+        count += 1
 
     print("Recipe Cook Time: ", recipe_cook_time)
     print()
