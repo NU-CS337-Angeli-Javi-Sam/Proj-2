@@ -11,17 +11,17 @@ if __name__ == "__main__":
     # url = 'https://www.epicurious.com/recipes/food/views/my-favorite-simple-roast-chicken-231348'
     url = 'https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe'
 
-    # webpage_content = fetch_recipe(url)
+    webpage_content = fetch_recipe(url)
 
-    # parsed_html = parse_html(webpage_content)
+    parsed_html = parse_html(webpage_content)
 
     # for key in parsed_html:
     #     print(key)
     #     print()
 
-    # recipe = create_recipe(parsed_html)
+    recipe = create_recipe(parsed_html)
 
     # virtual_chef.set_recipe(recipe)
 
-    sentence = 'chop onion with knife'
-    print(parse_instruction(sentence))
+    # sentence = 'chop onions with knife'
+    # print(parse_instruction(sentence))

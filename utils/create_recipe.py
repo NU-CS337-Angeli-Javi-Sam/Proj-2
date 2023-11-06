@@ -11,6 +11,8 @@ def create_recipe(recipe_data):
     recipe_name: str = recipe_data["name"]
     recipe_ingredients: List["str"] = recipe_data["recipeIngredient"]
     recipe_instructions: List["str"] = recipe_data["recipeInstructions"]
+
+
     recipe_cook_time: str = recipe_data["cookTime"]
     recipe_total_time: str = recipe_data["totalTime"]
 
@@ -19,6 +21,24 @@ def create_recipe(recipe_data):
 
 
     recipe.set_name(recipe_name)
+    print("Recipe: ", recipe_name)
+    print()
+
+    print("Recipe Ingredients: ",recipe_ingredients)
+    print()
+
+    print("Recipe Instructions: ",recipe_instructions)
+    print()
+
+    print("Recipe Cook Time: ", recipe_cook_time)
+    print()
+
+    print("Recipe Total Time: ", recipe_total_time)
+    print()
+
+    print(recipe_yield)
+    print()
+
 
     # for ingredient in recipe_ingredients:
     #     name, quantity, metric = parse_ingredient(ingredient)

@@ -36,6 +36,8 @@ class DependencyParser:
 
                     # Calculate the score for the new state using a scoring function.
                     new_state['score'] = self.score_state(new_state)
+                    print(new_state)
+                    print()
 
                     # Add the new state to the candidate list.
                     new_beam.append(new_state)
