@@ -1,5 +1,5 @@
 from typing import Any, Optional
-from data_structures.Node import Node
+from data_structures.Instruction import Instruction
 
 class DoublyLinkedList:
     def __init__(self) -> None:
@@ -20,19 +20,19 @@ class DoublyLinkedList:
     def __len__(self) -> int:
         return self.get_length()
 
-    def get_head(self) -> Optional["Node"]:
+    def get_head(self) -> Optional["Instruction"]:
         return self.__head
 
-    def get_tail(self) -> Optional["Node"]:
+    def get_tail(self) -> Optional["Instruction"]:
         return self.__tail
 
     def get_length(self) -> int:
         return self.__length
 
-    def __set_head(self, node: Optional["Node"]) -> None:
+    def __set_head(self, node: Optional["Instruction"]) -> None:
         self.__head = node
 
-    def __set_tail(self, node: Optional["Node"]) -> None:
+    def __set_tail(self, node: Optional["Instruction"]) -> None:
         self.__tail = node
 
     def __set_length(self, length: int) -> None:
@@ -41,8 +41,8 @@ class DoublyLinkedList:
     def __increment_length(self) -> None:
         self.__set_length(self.__length + 1)
 
-    def push(self, data: Optional["Node"]) -> None:
-        new_node = Node(data)
+    def push(self, data: Optional["Instruction"]) -> None:
+        new_node = Instruction(data)
 
         if self.get_head() is None:
             self.__set_head(new_node)
@@ -56,8 +56,8 @@ class DoublyLinkedList:
         self.__set_head(new_node)
         self.__increment_length()
 
-    def append(self, data: Optional["Node"]) -> None:
-        new_node = Node(data)
+    def append(self, data: Optional["Instruction"]) -> None:
+        new_node = Instruction(data)
 
         if self.get_head() is None:
             self.__set_head(new_node)
@@ -71,7 +71,7 @@ class DoublyLinkedList:
         self.__set_tail(new_node)
         self.__increment_length()
 
-    def insertAt(self, data: Optional["Node"], index: int) -> None:
+    def insertAt(self, data: Optional["Instruction"], index: int) -> None:
 
         if index < 0 or index > self.get_length():
             raise IndexError("Index is out of range")
@@ -83,7 +83,7 @@ class DoublyLinkedList:
             self.append(data)
             return
 
-        new_node = Node(data)
+        new_node = Instruction(data)
 
         curr_node = self.get_head()
         curr_node_index = 0

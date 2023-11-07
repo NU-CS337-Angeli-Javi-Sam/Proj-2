@@ -1,11 +1,12 @@
 from typing import List
-import nltk
+# import nltk
 from nltk.tokenize import sent_tokenize
 
 from data_structures.Recipe import Recipe
 from parsers.parse_ingredient import parse_ingredient
 from parsers.parse_instruction import parse_instruction
 from parsers.parse_time import parse_time
+from data_structures.Instruction import Instruction
 from data_structures.ontologies.Measurements import MeasurementsOntology
 
 # nltk.download('punkt')
@@ -72,6 +73,10 @@ def create_recipe(recipe_data):
     for i, instruction in enumerate(recipe_instructions):
         print(f"{str(i+1)}) {instruction}")
 
+    # Go through each of the instructions and make Instruction objects that we add to our doubly-linked list in Recipe
+    for instruction_sent in recipe_instructions:
+        print(Instruction(instruction_sent))
+    
     print()
 
     # Get recipe prep notes
