@@ -7,6 +7,7 @@ from parsers.parse_ingredient import parse_ingredient
 from parsers.parse_instruction import parse_instruction
 from parsers.parse_time import parse_time
 from data_structures.Instruction import Instruction
+from data_structures.Ingredient import Ingredient
 from data_structures.ontologies.Measurements import MeasurementsOntology
 
 # nltk.download('punkt')
@@ -17,6 +18,11 @@ def create_recipe(recipe_data):
 
     recipe_name: str = recipe_data["name"]
     recipe_ingredients: List["str"] = []
+
+    #Temp structure, wasn't sure where to add the ingredient dictionary obj so I put it here - Sam
+    #String(Ingredient original name) to Ingredient obj (parsed ingredient)
+    recipe_ingredients_dict = {}
+
     recipe_instructions: List["str"] = []
     recipe_prep_notes: List["str"] = []
 
@@ -33,11 +39,35 @@ def create_recipe(recipe_data):
 
     # Get recipe ingredients
     print("Recipe Ingredients: \n")
+
     for ingredient in recipe_data["recipeIngredient"]:
         recipe_ingredients.append(ingredient)
         print(f"  - {ingredient}")
         print()
     print()
+
+    for ingredient in recipe_ingredients:
+        if "Special Equipment" in ingredient:
+            continue
+
+        # Remove measurement abbreviations
+        ingredient_sent_lst = ingredient.split(" ")
+        for i in range(len(ingredient_sent_lst)):
+            measurement_category = measurements.get_category(ingredient_sent_lst[i])
+            if measurement_category != "Unknown":
+                ingredient_sent_lst[i] = measurement_category
+
+        ingredient_sent = sent_tokenize(" ".join(ingredient_sent_lst))[0]
+        # print(ingredient_sent)
+
+        #Construct ingredient object and place into ingredient dictionary
+        parsed_ingredient = Ingredient(ingredient_sent)
+
+        recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
+
+    for k,v in recipe_ingredients_dict.items():
+        print(k, v)
+
 
     # Get recipe instructions
     print("Recipe Instructions: \n")
