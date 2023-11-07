@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 # import nltk
 from nltk.tokenize import sent_tokenize
 
@@ -13,31 +13,21 @@ from data_structures.ontologies.Measurements import MeasurementsOntology
 # nltk.download('punkt')
 measurements = MeasurementsOntology()
 
-def create_recipe(recipe_data):
-    recipe: Recipe = Recipe()
-
+def get_and_set_recipe_name(recipe: Recipe, recipe_data: Any) -> None:
     recipe_name: str = recipe_data["name"]
+
+    recipe.set_name(recipe_name)
+
+    print("Recipe Name:", recipe_name)
+    print()
+
+def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
     recipe_ingredients: List["str"] = []
 
     #Temp structure, wasn't sure where to add the ingredient dictionary obj so I put it here - Sam
     #String(Ingredient original name) to Ingredient obj (parsed ingredient)
     recipe_ingredients_dict = {}
 
-    recipe_instructions: List["str"] = []
-    recipe_prep_notes: List["str"] = []
-
-    recipe_cook_time: str = recipe_data["cookTime"]
-    recipe_total_time: str = recipe_data["totalTime"]
-
-    # Not sure at the moment what to do with this/what exact data we wanna extract from this
-    recipe_yield: str = recipe_data["recipeYield"]
-
-    # Get recipe name
-    recipe.set_name(recipe_name)
-    print("Recipe Name:", recipe_name)
-    print()
-
-    # Get recipe ingredients
     print("Recipe Ingredients: \n")
 
     for ingredient in recipe_data["recipeIngredient"]:
@@ -68,8 +58,10 @@ def create_recipe(recipe_data):
     for k,v in recipe_ingredients_dict.items():
         print(k, v)
 
+def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
+    recipe_instructions: List["str"] = []
+    recipe_prep_notes: List["str"] = []
 
-    # Get recipe instructions
     print("Recipe Instructions: \n")
     count = 1
     for instruction in recipe_data["recipeInstructions"]:
@@ -89,14 +81,14 @@ def create_recipe(recipe_data):
                 recipe_prep_notes.append(extra_note)
             else:
                 recipe_prep_notes.append(extra_note)
-        
+
         # Replace measurement abbreviations to facilitate sentence splitting
         instruction_text_lst = instr.split(" ")
         for i in range(len(instruction_text_lst)):
             measurement_category = measurements.get_category(instruction_text_lst[i])
             if measurement_category != "Unknown":
                 instruction_text_lst[i] = measurement_category
-    
+
         sentences = sent_tokenize(" ".join(instruction_text_lst))
         recipe_instructions.extend(sentences)
 
@@ -106,7 +98,7 @@ def create_recipe(recipe_data):
     # Go through each of the instructions and make Instruction objects that we add to our doubly-linked list in Recipe
     for instruction_sent in recipe_instructions:
         print(Instruction(instruction_sent))
-    
+
     print()
 
     # Get recipe prep notes
@@ -116,15 +108,35 @@ def create_recipe(recipe_data):
         print(f"{count}) {prep_note}")
         count += 1
 
-    # Get recipe times and yield
+def get_and_set_recipe_cook_time(recipe: Recipe, recipe_data: Any) -> None:
+    recipe_cook_time: str = recipe_data["cookTime"]
+
     print("Recipe Cook Time:", recipe_cook_time)
     print()
+
+def get_and_set_recipe_total_time(recipe: Recipe, recipe_data: Any) -> None:
+    recipe_total_time: str = recipe_data["totalTime"]
 
     print("Recipe Total Time:", recipe_total_time)
     print()
 
-    print(recipe_yield)
+def get_and_set_recipe_yield(recipe: Recipe, recipe_data: Any) -> None:
+    # Not sure at the moment what to do with this/what exact data we wanna extract from this
+    recipe_yield: str = recipe_data["recipeYield"]
+
+    print("Recipe Yield:",recipe_yield)
     print()
+
+def create_recipe(recipe_data):
+    recipe: Recipe = Recipe()
+
+    get_and_set_recipe_name(recipe, recipe_data)
+    get_and_set_recipe_ingredients(recipe, recipe_data)
+    get_and_set_recipe_instructions(recipe, recipe_data)
+    get_and_set_recipe_cook_time(recipe, recipe_data)
+    get_and_set_recipe_total_time(recipe, recipe_data)
+    get_and_set_recipe_yield(recipe, recipe_data)
+
 
 
     # for ingredient in recipe_ingredients:
