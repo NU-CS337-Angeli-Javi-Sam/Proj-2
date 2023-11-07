@@ -1,9 +1,15 @@
 from typing import List
+import nltk
+from nltk.tokenize import sent_tokenize
+
 from data_structures.Recipe import Recipe
 from parsers.parse_ingredient import parse_ingredient
 from parsers.parse_instruction import parse_instruction
 from parsers.parse_time import parse_time
+from data_structures.ontologies.Measurements import MeasurementsOntology
 
+nltk.download('punkt')
+measurements = MeasurementsOntology()
 
 def create_recipe(recipe_data):
     recipe: Recipe = Recipe()
@@ -47,6 +53,28 @@ def create_recipe(recipe_data):
                 recipe_prep_notes.append(extra_note)
             else:
                 recipe_prep_notes.append(extra_note)
+        # Grab text for each individual instruction
+        instruction_text = instruction["text"]
+        if instruction_text == None:
+            continue
+
+        # Replace measurement abbreviations to facilitate sentence splitting
+        instruction_text_lst = instruction_text.split(" ")
+        for i in range(len(instruction_text_lst)):
+            measurement_category = measurements.get_category(instruction_text_lst[i])
+            if measurement_category != "Unknown":
+                instruction_text_lst[i] = measurement_category
+        
+        # print("TEXT: ", instruction_text_lst)
+
+    
+        sentences = sent_tokenize(" ".join(instruction_text_lst))
+        print("~~~", sentences)
+        
+
+        # recipe_instructions.append(instruction_text)
+        print(f"{count}) {instruction_text}")
+        count += 1
 
             recipe_instructions.append(instr)
             print(f"{count}) {instr}")

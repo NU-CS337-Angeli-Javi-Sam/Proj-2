@@ -23,5 +23,5 @@ class CookingActionsOntology:
             for action in actions:
                 self.lexicon[action] = category
 
-    def get_category(self, ingredient):
-        return self.lexicon.get(ingredient, "Unknown")
+    def get_category(self, action):
+        return self.lexicon.get(action, "Unknown")
