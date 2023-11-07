@@ -1,22 +1,20 @@
 class CookingActionsOntology:
     def __init__(self):
         self.categories = {
-            "Heat": ["bake", "boil", "broil", "simmer", "fry", "grill", "roast", "saute", "steam", "sear", "melt", "heat", "chill"],
-            "Prepare": ["chop", "dice", "mince", "slice", "grate", "peel", "trim", "shred", "mash"],
-            "Mix": ["stir", "whisk", "blend", "fold", "knead"],
-            "Bake": ["bake", "roast", "broil"],
+            "Heat": ["bake", "boil", "broil", "simmer", "fry", "grill", "roast", "saute", "steam", "sear", "melt", "heat", "chill", "reheat"],
+            "Prepare": ["chop", "dice", "mince", "slice", "grate", "peel", "trim", "shred", "mash", "cut", "carve", "quarter", "divide", "strip", "crumple", "cut", "decorate", "fold", "form", "moisten", "puree", "season", "set", "sprinkle", "strew", "taste", "thin", "tie", "top", "trim", "turn", "twist", "wilt", "wind", "wrap"],
+            "Mix": ["stir", "whisk", "blend", "fold", "knead", "mix", "combine"],
+            "Bake": ["bake", "roast", "broil", "roll"],
             "Simmer": ["simmer", "boil", "stew"],
             "Fry": ["fry", "deep-fry", "pan-fry"],
             "Grill": ["grill", "barbecue"],
-            "Roast": ["roast", "bake"],
+            "Roast": ["roast", "bake", "roll"],
             "Saute": ["saute", "pan-fry", "sear"],
             "Steam": ["steam", "poach"],
-            "Cut": ["chop", "dice", "mince", "slice", "grate"],
-            "Mix": ["stir", "whisk", "blend", "fold", "knead"],
+            "Cut": ["cut", "slice", "chop", "dice", "mince", "shred", "carve", "quarter", "divide", "strip"],
             "Measure": ["measure", "weigh"],
-            "Serve": ["serve", "plate", "garnish", "taste", "serve", "serve"],
-            "Prepare Ingredients": ["prep", "clean", "peel", "trim", "grate"],
-            "General Kitchen Actions": ["press", "remove", "replace", "use", "adjust", "cover", "store", "reheat", "discard"],
+            "Serve": ["serve", "plate", "garnish", "taste"],
+            "General Kitchen Actions": ["press", "remove", "set", "drain", "use", "adjust", "cover", "store", "discard", "close", "open", "drop", "pack", "raise", "refresh", "ring", "salt", "scatter", "scrape", "scrub", "separate", "settle", "shave", "skim", "slide", "slip", "slit", "smear", "soak", "spoon", "spread", "stir", "strain", "stuff", "surround", "tilt", "tip", "toss"],
         }
 
         self.lexicon = {}
