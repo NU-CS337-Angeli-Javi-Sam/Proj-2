@@ -9,9 +9,9 @@ def create_recipe(recipe_data):
     recipe: Recipe = Recipe()
 
     recipe_name: str = recipe_data["name"]
-    recipe_ingredients: List["str"] = recipe_data["recipeIngredient"]
+    recipe_ingredients: List["str"] = []
     recipe_instructions: List["str"] = []
-
+    recipe_prep_notes: List["str"] = []
 
     recipe_cook_time: str = recipe_data["cookTime"]
     recipe_total_time: str = recipe_data["totalTime"]
@@ -21,27 +21,54 @@ def create_recipe(recipe_data):
 
 
     recipe.set_name(recipe_name)
-    print("Recipe: ", recipe_name)
+    print("Recipe Name:", recipe_name)
     print()
 
-    print("Recipe Ingredients: ", recipe_ingredients)
+    print("Recipe Ingredients: \n")
+    for ingredient in recipe_data["recipeIngredient"]:
+        recipe_instructions.append(ingredient)
+        print(f"  - {ingredient}")
+        print()
     print()
 
-    print("Recipe:")
+
+
+    print("Recipe Instructions: \n")
     count = 1
     for instruction in recipe_data["recipeInstructions"]:
-        instruction_text = instruction["text"]
-        if instruction_text == None:
+        instruction_text: str = instruction["text"]
+        if instruction_text == None or instruction_text.startswith("Editor's note:"):
             continue
 
-        recipe_instructions.append(instruction_text)
-        print(f"{count}) {instruction_text}")
-        count += 1
+        if len(instruction_text.split("\nDo Ahead: ")) == 2:
+            instr, extra_note = instruction_text.split("\nDo Ahead: ")
+            if len(extra_note.split("\n\n")) == 2:
+                extra_note, _ = extra_note.split("\n\n")
+                recipe_prep_notes.append(extra_note)
+            else:
+                recipe_prep_notes.append(extra_note)
 
-    print("Recipe Cook Time: ", recipe_cook_time)
+            recipe_instructions.append(instr)
+            print(f"{count}) {instr}")
+            print()
+            continue
+
+        recipe_instructions.append(instruction)
+        print(f"{count}) {instruction_text}")
+        print()
+        count += 1
     print()
 
-    print("Recipe Total Time: ", recipe_total_time)
+    print("Recipe Prep Notes: \n")
+    count = 1
+    for prep_note in recipe_prep_notes:
+        print(f"{count}) {prep_note}")
+        count += 1
+
+    print("Recipe Cook Time:", recipe_cook_time)
+    print()
+
+    print("Recipe Total Time:", recipe_total_time)
     print()
 
     print(recipe_yield)
