@@ -16,10 +16,10 @@ measurements = MeasurementsOntology()
 def get_and_set_recipe_name(recipe: Recipe, recipe_data: Any) -> None:
     recipe_name: str = recipe_data["name"]
 
-    recipe.set_name(recipe_name)
-
     print("Recipe Name:", recipe_name)
     print()
+
+    recipe.set_name(recipe_name)
 
 def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
     recipe_ingredients: List["str"] = []
