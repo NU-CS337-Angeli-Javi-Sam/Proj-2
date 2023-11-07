@@ -8,7 +8,7 @@ from parsers.parse_instruction import parse_instruction
 from parsers.parse_time import parse_time
 from data_structures.ontologies.Measurements import MeasurementsOntology
 
-nltk.download('punkt')
+# nltk.download('punkt')
 measurements = MeasurementsOntology()
 
 def create_recipe(recipe_data):
@@ -25,74 +25,63 @@ def create_recipe(recipe_data):
     # Not sure at the moment what to do with this/what exact data we wanna extract from this
     recipe_yield: str = recipe_data["recipeYield"]
 
-
+    # Get recipe name
     recipe.set_name(recipe_name)
     print("Recipe Name:", recipe_name)
     print()
 
+    # Get recipe ingredients
     print("Recipe Ingredients: \n")
     for ingredient in recipe_data["recipeIngredient"]:
-        recipe_instructions.append(ingredient)
+        recipe_ingredients.append(ingredient)
         print(f"  - {ingredient}")
         print()
     print()
 
-
-
+    # Get recipe instructions
     print("Recipe Instructions: \n")
     count = 1
     for instruction in recipe_data["recipeInstructions"]:
+        # Grab text for each individual instruction
         instruction_text: str = instruction["text"]
-        if instruction_text == None or instruction_text.startswith("Editor's note:"):
+        if instruction_text == None:
             continue
 
+        instr = instruction_text
+        # Handle "Do Ahead:" in instructions
         if len(instruction_text.split("\nDo Ahead: ")) == 2:
             instr, extra_note = instruction_text.split("\nDo Ahead: ")
-            if len(extra_note.split("\n\n")) == 2:
+
+            # Remove Editor's note
+            if len(extra_note.split("\n\nEditor's note: ")) == 2:
                 extra_note, _ = extra_note.split("\n\n")
                 recipe_prep_notes.append(extra_note)
             else:
                 recipe_prep_notes.append(extra_note)
-        # Grab text for each individual instruction
-        instruction_text = instruction["text"]
-        if instruction_text == None:
-            continue
-
+        
         # Replace measurement abbreviations to facilitate sentence splitting
-        instruction_text_lst = instruction_text.split(" ")
+        instruction_text_lst = instr.split(" ")
         for i in range(len(instruction_text_lst)):
             measurement_category = measurements.get_category(instruction_text_lst[i])
             if measurement_category != "Unknown":
                 instruction_text_lst[i] = measurement_category
-        
-        # print("TEXT: ", instruction_text_lst)
-
     
         sentences = sent_tokenize(" ".join(instruction_text_lst))
-        print("~~~", sentences)
-        
+        recipe_instructions.extend(sentences)
 
-        # recipe_instructions.append(instruction_text)
-        print(f"{count}) {instruction_text}")
-        count += 1
+    for i, instruction in enumerate(recipe_instructions):
+        print(f"{str(i+1)}) {instruction}")
 
-            recipe_instructions.append(instr)
-            print(f"{count}) {instr}")
-            print()
-            continue
-
-        recipe_instructions.append(instruction)
-        print(f"{count}) {instruction_text}")
-        print()
-        count += 1
     print()
 
+    # Get recipe prep notes
     print("Recipe Prep Notes: \n")
     count = 1
     for prep_note in recipe_prep_notes:
         print(f"{count}) {prep_note}")
         count += 1
 
+    # Get recipe times and yield
     print("Recipe Cook Time:", recipe_cook_time)
     print()
 
