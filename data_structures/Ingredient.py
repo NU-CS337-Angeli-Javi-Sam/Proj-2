@@ -52,7 +52,7 @@ class Ingredient:
         return self.__measurement
 
     def __set_name(self, data):
-        data = data.lower().split()
+        data = data.replace(',', '').lower().split()
 
         for index, word in enumerate(data):
             word_stem = self.__get_word_stem(word)
@@ -82,7 +82,8 @@ class Ingredient:
                             self.__full_name = adj2 + ' ' + self.__full_name
 
     def __set_qualities(self, data):
-        data = data.lower().split()
+        data = data.replace(',', '').lower().split()
+
         for word in data:
             word_stem = self.__get_word_stem(word).lower()
 
@@ -90,7 +91,7 @@ class Ingredient:
                 self.__qualities.append(word)
 
     def __set_measurement(self, data):
-        data = data.lower().split()
+        data = data.replace(',', '').lower().split()
 
         for index, word in enumerate(data):
             if unicodedata.normalize('NFKC', word)[0].isdigit():
