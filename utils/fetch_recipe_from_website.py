@@ -1,6 +1,7 @@
 from typing import Optional
 from requests import Request, Response
 
+
 def fetch_recipe_from_website(url: str) -> Optional["str"]:
     """
     Fetches the content of a recipe webpage from a given URL.
