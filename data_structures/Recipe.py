@@ -21,8 +21,6 @@ class Recipe:
             output += "\n\n"
 
         output += str(self.get_instructions())
-        # for i, instruction in self.get_instructions():
-        #     output += f"{i + 1}) {instruction}\n\n"
 
         return output
 
