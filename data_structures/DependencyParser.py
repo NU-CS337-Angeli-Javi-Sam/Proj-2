@@ -81,8 +81,8 @@ class DependencyParser:
 
             action, comparison_item = temp_stack
 
-            ingredients = self.recipe_relationships.ingredient_for_action(action)
-            tools = self.recipe_relationships.tools_for_action(action)
+            ingredients = self.recipe_relationships.find_ingredients_for_action(action)
+            tools = self.recipe_relationships.find_tools_for_action(action)
 
             if comparison_item in (ingredients + tools):
                 valid_actions.append(f'left-arc({action}, {comparison_item})')
