@@ -5,6 +5,7 @@ from utils.create_recipe import create_recipe
 from utils.fetch_recipe_from_website import fetch_recipe_from_website
 from utils.extract_recipe_data import extract_recipe_data
 
+
 def main() -> None:
     """
     The main function to extract and process a recipe from a specific website.
@@ -32,7 +33,7 @@ def main() -> None:
     # ALL RECIPES MUST BE FROM https://www.epicurious.com/
     # url = 'https://www.epicurious.com/recipes/food/views/ba-syn-creamed-spinach-stuffed-meatloaf'
     # url = 'https://www.epicurious.com/recipes/food/views/my-favorite-simple-roast-chicken-231348'
-    url: str = 'https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe'
+    url: str = "https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe"
 
     # Fetch the recipe from the Epicurious website
     recipe_webpage: Optional["str"] = fetch_recipe_from_website(url)
@@ -53,6 +54,7 @@ def main() -> None:
 
     # Provide the Virtual Chef the recipe to use
     virtual_chef.set_recipe(recipe)
+
 
 if __name__ == "__main__":
     main()
