@@ -1,5 +1,18 @@
 class MeasurementsOntology:
     def __init__(self):
+        """
+        Initializes a MeasurementsOntology instance with predefined measurement categories and their variants.
+
+        The categories map measurement variants (e.g., abbreviations, synonyms) to their respective measurement categories.
+        The lexicon is a dictionary that maps specific measurement variants to their corresponding categories.
+
+        Example:
+        {
+            "hour": ["hr", "hr.", "hour", "hours"],
+            "minute": ["min.", "min", "minutes", "minute"],
+            ...
+        }
+        """
         self.categories = {
             "hour": ["hr", "hr.", "hour", "hours"],
             "minute": ["min.", "min", "minutes", "minute"],
@@ -58,4 +71,13 @@ class MeasurementsOntology:
                 self.lexicon[variant] = category
 
     def get_category(self, measurement):
+        """
+        Get the category for a given measurement variant.
+
+        Parameters:
+        - measurement (str): The measurement variant (e.g., abbreviation, synonym) to retrieve the category for.
+
+        Returns:
+        - str: The category associated with the provided measurement variant. If the variant is not found, it returns "Unknown."
+        """
         return self.lexicon.get(measurement, "Unknown")

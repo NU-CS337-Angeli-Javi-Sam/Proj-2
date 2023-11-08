@@ -1,5 +1,19 @@
 class CookingToolsOntology:
     def __init__(self):
+        """
+        Initializes a CookingActionsOntology instance with predefined cooking action categories and actions.
+
+        The categories map cooking actions to their respective categories, making it easy to categorize actions.
+        The lexicon is a dictionary that maps specific cooking actions to their corresponding categories.
+
+        Example:
+        {
+            "Heat": ["bake", "boil", ...],
+            "Prepare": ["chop", "dice", ...],
+            ...
+        }
+        """
+
         self.categories = {
             "Cutting Tools": ["knife", "scissors", "mandoline", "peeler", "grater", "zester", "shears", "cleaver", "paring knife", "bread knife"],
             "Cooking Vessels": ["pot", "pan", "skillet", "wok", "saucepan", "roasting pan", "casserole dish", "stockpot", "Dutch oven", "grill pan"],
@@ -15,4 +29,13 @@ class CookingToolsOntology:
                 self.lexicon[tool] = category
 
     def get_category(self, tool):
+        """
+        Get the category for a given cooking action.
+
+        Parameters:
+        - action (str): The cooking action to retrieve the category for.
+
+        Returns:
+        - str: The category associated with the provided cooking action. If the action is not found, it returns "Unknown."
+        """
         return self.lexicon.get(tool, "Unknown")

@@ -1,5 +1,18 @@
 class CookingActionsOntology:
     def __init__(self):
+        """
+        Initializes a CookingActionsOntology instance with predefined cooking action categories and actions.
+
+        The categories map cooking actions to their respective categories, making it easy to categorize actions.
+        The lexicon is a dictionary that maps specific cooking actions to their corresponding categories.
+
+        Example:
+        {
+            "Heat": ["bake", "boil", ...],
+            "Prepare": ["chop", "dice", ...],
+            ...
+        }
+        """
         self.categories = {
             "Heat": ["bake", "boil", "broil", "simmer", "fry", "grill", "roast", "saute", "steam", "sear", "melt", "heat", "chill", "reheat"],
             "Prepare": ["chop", "dice", "mince", "slice", "grate", "peel", "trim", "shred", "mash", "cut", "carve", "quarter", "divide", "strip", "crumple", "cut", "decorate", "fold", "form", "moisten", "puree", "season", "set", "sprinkle", "strew", "taste", "thin", "tie", "top", "trim", "turn", "twist", "wilt", "wind", "wrap"],
@@ -23,4 +36,13 @@ class CookingActionsOntology:
                 self.lexicon[action] = category
 
     def get_category(self, action):
+        """
+        Get the category for a given cooking action.
+
+        Parameters:
+        - action (str): The cooking action to retrieve the category for.
+
+        Returns:
+        - str: The category associated with the provided cooking action. If the action is not found, it returns "Unknown."
+        """
         return self.lexicon.get(action, "Unknown")

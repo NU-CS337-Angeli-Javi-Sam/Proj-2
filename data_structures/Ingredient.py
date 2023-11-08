@@ -107,8 +107,3 @@ class Ingredient:
 
     def __str__(self):
         return f"Original text: {self.__original_text}\nFull name: {self.__full_name}\nSimplified Name: {self.__simplified_name}\nQualities: {self.__qualities}\nMeasurement: {self.__measurement}\nQuantity: {self.__quantity}\n\n"
-
-
-
-
-
