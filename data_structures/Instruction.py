@@ -42,13 +42,13 @@ class Instruction(Node):
         return word_list
 
     def __set_cooking_actions(self, instruction_sent: str) -> None:
-        self.__annotate(instruction_sent, cooking_actions)
+        return self.__annotate(instruction_sent, cooking_actions)
 
     def __set_ingredients(self, instruction_sent: str) -> None:
-        self.__annotate(instruction_sent, ingredients)
+        return self.__annotate(instruction_sent, ingredients)
 
     def __set_tools(self, instruction_sent: str) -> None:
-        self.__annotate(instruction_sent, tools)
+        return self.__annotate(instruction_sent, tools)
 
     def get_cooking_actions(self) -> List["str"]:
         return self.__cooking_actions
