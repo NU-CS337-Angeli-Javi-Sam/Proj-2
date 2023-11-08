@@ -5,11 +5,23 @@ from data_structures.ontologies.Ingredients import IngredientOntology
 
 class RecipeRelationships:
     def __init__(self):
+        """
+        Initializes a RecipeRelationships instance with ontologies for ingredients, cooking tools, and actions.
+        """
         self.ingredient_ontology = IngredientOntology()
         self.tools_ontology = CookingToolsOntology()
         self.actions_ontology = CookingActionsOntology()
 
-    def ingredient_for_action(self, action):
+    def find_ingredients_for_action(self, action):
+        """
+        Returns a list of ingredients typically used for the given cooking action.
+
+        Parameters:
+        - action (str): The cooking action for which ingredients are needed.
+
+        Returns:
+        - List[str]: A list of ingredients commonly associated with the provided cooking action.
+        """
         action_ingredient_map = {
             "bake": [
                 "flour",
@@ -187,7 +199,16 @@ class RecipeRelationships:
         }
         return action_ingredient_map.get(action, [])
 
-    def tools_for_action(self, action):
+    def find_tools_for_action(self, action):
+        """
+        Returns a list of cooking tools typically used for the given cooking action.
+
+        Parameters:
+        - action (str): The cooking action for which cooking tools are needed.
+
+        Returns:
+        - List[str]: A list of cooking tools commonly associated with the provided cooking action.
+        """
         action_tool_map = {
             "bake": [
                 "oven",
