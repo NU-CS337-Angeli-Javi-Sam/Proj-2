@@ -4,7 +4,7 @@ from data_structures.ontologies.Ingredients import IngredientOntology
 
 
 class RecipeRelationships:
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initializes a RecipeRelationships instance with ontologies for ingredients, cooking tools, and actions.
         """

@@ -2,7 +2,7 @@ from typing import Optional
 
 
 class Node:
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize a Node for a doubly-linked list.
 
