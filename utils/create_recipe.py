@@ -16,8 +16,6 @@ measurements = MeasurementsOntology()
 def get_and_set_recipe_name(recipe: Recipe, recipe_data: Any) -> None:
     recipe_name: str = recipe_data["name"]
 
-    print("Recipe Name:", recipe_name)
-    print()
 
     recipe.set_name(recipe_name)
 
@@ -28,13 +26,8 @@ def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
     #String(Ingredient original name) to Ingredient obj (parsed ingredient)
     recipe_ingredients_dict = {}
 
-    print("Recipe Ingredients: \n")
-
     for ingredient in recipe_data["recipeIngredient"]:
         recipe_ingredients.append(ingredient)
-        print(f"  - {ingredient}")
-        print()
-    print()
 
     for ingredient in recipe_ingredients:
         if "Special Equipment" in ingredient:
@@ -53,17 +46,16 @@ def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
         #Construct ingredient object and place into ingredient dictionary
         parsed_ingredient = Ingredient(ingredient_sent)
 
-        recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
+        recipe_ingredients_dict[ingredient_sent] = parsed_ingredient
 
-    for k,v in recipe_ingredients_dict.items():
-        recipe.add_ingredient(k, v)
-        print(k, v)
+    recipe.add_ingredients(recipe_ingredients_dict)
+
 
 def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
     recipe_instructions: List["str"] = []
     recipe_prep_notes: List["str"] = []
 
-    print("Recipe Instructions: \n")
+    # print("Recipe Instructions: \n")
     count = 1
     for instruction in recipe_data["recipeInstructions"]:
         # Grab text for each individual instruction
@@ -93,40 +85,25 @@ def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
         sentences = sent_tokenize(" ".join(instruction_text_lst))
         recipe_instructions.extend(sentences)
 
-    for i, instruction in enumerate(recipe_instructions):
-        print(f"{str(i+1)}) {instruction}")
+    recipe.add_instructions(recipe_instructions)
 
     # Go through each of the instructions and make Instruction objects that we add to our doubly-linked list in Recipe
-    for instruction_sent in recipe_instructions:
-        print(Instruction(instruction_sent))
 
-    print()
 
     # Get recipe prep notes
-    print("Recipe Prep Notes: \n")
-    count = 1
-    for prep_note in recipe_prep_notes:
-        print(f"{count}) {prep_note}")
-        count += 1
 
 def get_and_set_recipe_cook_time(recipe: Recipe, recipe_data: Any) -> None:
     recipe_cook_time: str = recipe_data["cookTime"]
 
-    print("Recipe Cook Time:", recipe_cook_time)
-    print()
 
 def get_and_set_recipe_total_time(recipe: Recipe, recipe_data: Any) -> None:
     recipe_total_time: str = recipe_data["totalTime"]
 
-    print("Recipe Total Time:", recipe_total_time)
-    print()
 
 def get_and_set_recipe_yield(recipe: Recipe, recipe_data: Any) -> None:
     # Not sure at the moment what to do with this/what exact data we wanna extract from this
     recipe_yield: str = recipe_data["recipeYield"]
 
-    print("Recipe Yield:",recipe_yield)
-    print()
 
 def create_recipe(recipe_data):
     recipe: Recipe = Recipe()

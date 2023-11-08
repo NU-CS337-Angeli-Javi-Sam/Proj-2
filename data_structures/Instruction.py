@@ -18,6 +18,7 @@ class Instruction(Node):
         # Give each Instruction __next and __prev variables
         super().__init__()
 
+        self.__instruction = instruction_sent
         self.__tools = []
         self.__ingredients = []
         self.__cooking_actions = []
@@ -29,6 +30,9 @@ class Instruction(Node):
         self.__set_cooking_actions(instruction_sent)
         self.__set_ingredients(instruction_sent)
         self.__set_tools(instruction_sent)
+
+    def get_instruction(self):
+        return self.__instruction
 
     def __get_word_stem(self, word):
         return stemmer.stem(re.search(r'[A-Za-z]*', word).group(0))

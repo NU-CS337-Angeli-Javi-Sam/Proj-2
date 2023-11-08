@@ -30,10 +30,11 @@ class DoublyLinkedList:
         """
         curr_node: Instruction = self.get_head()
         output: str = ""
+        count = 0
         while curr_node:
-            output += f"{curr_node.get_data()} <-> "
+            output += f"{count + 1}) {curr_node.get_instruction()}\n\n"
             curr_node: Instruction = curr_node.get_next()
-        output += "None"
+            count += 1
         return output
 
     def __len__(self) -> int:
