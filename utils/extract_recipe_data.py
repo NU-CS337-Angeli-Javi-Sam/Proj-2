@@ -30,4 +30,4 @@ def extract_recipe_data(html_content: str) -> Optional["Dict"]:
     json_content: Optional["str"] = script_tag.string if script_tag else None
     recipe_data: Optional["Dict"] = json.loads(json_content) if json_content else None
 
-    return
+    return recipe_data

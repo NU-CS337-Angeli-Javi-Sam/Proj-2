@@ -1,5 +1,5 @@
 from typing import Optional
-from requests import Request, Response
+from requests import Response, get as get_webpage
 
 
 def fetch_recipe_from_website(url: str) -> Optional["str"]:
@@ -23,11 +23,12 @@ def fetch_recipe_from_website(url: str) -> Optional["str"]:
     >>>     print("Failed to retrieve the recipe page.")
     """
 
-    response: Response = Request.get(url)
+    response: Response = get_webpage(url)
 
     if response.status_code != 200:
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
         return None
+
     # Get the webpage content
     webpage_content: str = response.text
     return webpage_content
