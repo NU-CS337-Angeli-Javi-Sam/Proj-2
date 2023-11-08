@@ -39,6 +39,7 @@ class Ingredient:
 
     def get_full_name(self):
         return self.__full_name
+
     def get_simplified_name(self):
         return self.__simplified_name
 
