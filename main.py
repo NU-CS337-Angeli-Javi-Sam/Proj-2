@@ -1,33 +1,58 @@
+from typing import Dict, Optional
+from data_structures.Recipe import Recipe
 from data_structures.VirtualChef import VirtualChef
-from parsers.parse_instruction import parse_instruction
 from utils.create_recipe import create_recipe
-from utils.fetch_recipe import fetch_recipe
-from utils.html_parser import parse_html
+from utils.fetch_recipe_from_website import fetch_recipe_from_website
+from utils.extract_recipe_data import extract_recipe_data
 
-def main():
-    # Takes in recipe
-    virtual_chef = VirtualChef()
+def main() -> None:
+    """
+    The main function to extract and process a recipe from a specific website.
 
-    # Recipe to parse
+    This function orchestrates the entire process of fetching a recipe from a website,
+    extracting relevant data, and creating a Recipe object to be used by a Virtual Chef.
+
+    It follows the following steps:
+    1. Initializes a Virtual Chef instance to assist the user in cooking a recipe.
+    2. Specifies the URL of the recipe webpage to be fetched.
+    3. Fetches the HTML content of the webpage using the specified URL.
+    4. Extracts relevant recipe data from the HTML content.
+    5. Creates a Recipe object from the extracted recipe data.
+    6. Provides the Virtual Chef with the created Recipe object.
+
+    Example:
+    - Replace the 'url' variable with the URL of the desired recipe.
+    - Execute the 'main' function to fetch, extract, and process the recipe.
+    """
+
+    # Initializes a Virtual Chef instance that will aid our user in cooking a given recipe
+    virtual_chef: VirtualChef = VirtualChef()
+
+    # Recipes to parse
+    # ALL RECIPES MUST BE FROM https://www.epicurious.com/
     # url = 'https://www.epicurious.com/recipes/food/views/ba-syn-creamed-spinach-stuffed-meatloaf'
     # url = 'https://www.epicurious.com/recipes/food/views/my-favorite-simple-roast-chicken-231348'
-    url = 'https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe'
+    url: str = 'https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe'
 
-    # Do surface-level parsing of HTML
-    webpage_content = fetch_recipe(url)
-    parsed_html = parse_html(webpage_content)
+    # Fetch the recipe from the Epicurious website
+    recipe_webpage: Optional["str"] = fetch_recipe_from_website(url)
 
-    # for key in parsed_html:
-    #     print(key)
-    #     print()
+    if recipe_webpage == None:
+        print("Something went wrong when fetching the webpage. Try again.")
+        return
 
-    # Compartmentalizes components of recipe given parsed HTML into a Recipe object
-    recipe = create_recipe(parsed_html)
+    # Extract relevant data from HTML
+    recipe_data: Optional["Dict"] = extract_recipe_data(recipe_webpage)
 
-    # Create annotations for each step
+    if recipe_data == None:
+        print("Something went wrong when parsing the HTML. Try again.")
+        return
 
+    # Creates a Recipe object from the provided recipe data
+    recipe: Recipe = create_recipe(recipe_data)
+
+    # Provide the Virtual Chef the recipe to use
     virtual_chef.set_recipe(recipe)
-
 
 if __name__ == "__main__":
     main()
