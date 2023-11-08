@@ -56,6 +56,7 @@ def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
         recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
 
     for k,v in recipe_ingredients_dict.items():
+        recipe.add_ingredient(k, v)
         print(k, v)
 
 def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
@@ -136,23 +137,5 @@ def create_recipe(recipe_data):
     get_and_set_recipe_cook_time(recipe, recipe_data)
     get_and_set_recipe_total_time(recipe, recipe_data)
     get_and_set_recipe_yield(recipe, recipe_data)
-
-
-
-    # for ingredient in recipe_ingredients:
-    #     name, quantity, metric = parse_ingredient(ingredient)
-    #     recipe.add_ingredient(name, quantity, metric)
-
-    # for instruction in recipe_instructions:
-    #     parsed_instruction = parse_instruction(instruction)
-    #     for instruct in parsed_instruction:
-    #         recipe.add_instruction(instruct)
-
-    # quantity, metric = parse_time(recipe_cook_time)
-    # recipe.add_cook_time(quantity, metric)
-
-    # quantity, metric = parse_time(recipe_total_time)
-    # recipe.add_total_time(quantity, metric)
-
 
     return recipe

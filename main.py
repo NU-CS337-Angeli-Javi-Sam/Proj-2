@@ -26,12 +26,8 @@ def main():
 
     # Create annotations for each step
 
+    virtual_chef.set_recipe(recipe)
 
-    # virtual_chef.set_recipe(recipe)
-
-    # sentence = 'chop onions with knife'
-    # print(parse_instruction(sentence))
 
 if __name__ == "__main__":
     main()
-    
