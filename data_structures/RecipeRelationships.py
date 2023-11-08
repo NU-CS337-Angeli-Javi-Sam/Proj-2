@@ -1,28 +1,24 @@
-from data_structures.ontologies.CookingActions import CookingActionsOntology
-from data_structures.ontologies.CookingTools import CookingToolsOntology
-from data_structures.ontologies.Ingredients import IngredientOntology
+from typing import Dict, List
 
 
 class RecipeRelationships:
     def __init__(self) -> None:
         """
-        Initializes a RecipeRelationships instance with ontologies for ingredients, cooking tools, and actions.
+        Initializes a RecipeRelationships mappings between ingredients and tools, and actions.
         """
-        self.ingredient_ontology = IngredientOntology()
-        self.tools_ontology = CookingToolsOntology()
-        self.actions_ontology = CookingActionsOntology()
+        self.action_ingredient_map: Dict[
+            "str", List["str"]
+        ] = self.create_action_ingredient_map()
+        self.action_tool_map: Dict["str", List["str"]] = self.create_action_tool_map()
 
-    def find_ingredients_for_action(self, action):
+    def create_action_ingredient_map(self) -> Dict["str", List["str"]]:
         """
-        Returns a list of ingredients typically used for the given cooking action.
-
-        Parameters:
-        - action (str): The cooking action for which ingredients are needed.
+        Create a dictionary that maps cooking actions to the list of ingredients typically used for each action.
 
         Returns:
-        - List[str]: A list of ingredients commonly associated with the provided cooking action.
+        - Dict[str, List[str]]: A dictionary where keys are cooking actions and values are lists of associated ingredients.
         """
-        action_ingredient_map = {
+        action_ingredient_map: Dict["str", List["str"]] = {
             "bake": [
                 "flour",
                 "sugar",
@@ -197,19 +193,16 @@ class RecipeRelationships:
                 "peeling",
             ],
         }
-        return action_ingredient_map.get(action, [])
+        return action_ingredient_map
 
-    def find_tools_for_action(self, action):
+    def create_action_tool_map(self) -> Dict["str", List["str"]]:
         """
-        Returns a list of cooking tools typically used for the given cooking action.
-
-        Parameters:
-        - action (str): The cooking action for which cooking tools are needed.
+        Create a dictionary that maps cooking actions to the list of cooking tools typically used for each action.
 
         Returns:
-        - List[str]: A list of cooking tools commonly associated with the provided cooking action.
+        - Dict[str, List[str]]: A dictionary where keys are cooking actions and values are lists of associated cooking tools.
         """
-        action_tool_map = {
+        action_tool_map: Dict["str", List["str"]] = {
             "bake": [
                 "oven",
                 "baking sheet",
@@ -284,4 +277,46 @@ class RecipeRelationships:
             "serve": ["serving utensils", "plates", "platters", "silverware"],
             "prep": ["knife", "cutting board", "peeler", "paring knife", "scissors"],
         }
-        return action_tool_map.get(action, [])
+        return action_tool_map
+
+    def get_action_ingredient_map(self) -> Dict["str", List["str"]]:
+        """
+        Get the dictionary that maps cooking actions to associated ingredients.
+
+        Returns:
+        - Dict[str, List[str]]: A dictionary where keys are cooking actions and values are lists of associated ingredients.
+        """
+        return self.action_ingredient_map
+
+    def get_action_tool_map(self) -> Dict["str", List["str"]]:
+        """
+        Get the dictionary that maps cooking actions to associated cooking tools.
+
+        Returns:
+        - Dict[str, List[str]]: A dictionary where keys are cooking actions and values are lists of associated cooking tools.
+        """
+        return self.action_tool_map
+
+    def find_ingredients_for_action(self, action):
+        """
+        Returns a list of ingredients typically used for the given cooking action.
+
+        Parameters:
+        - action (str): The cooking action for which ingredients are needed.
+
+        Returns:
+        - List[str]: A list of ingredients commonly associated with the provided cooking action.
+        """
+        return self.get_action_ingredient_map().get(action, [])
+
+    def find_tools_for_action(self, action):
+        """
+        Returns a list of cooking tools typically used for the given cooking action.
+
+        Parameters:
+        - action (str): The cooking action for which cooking tools are needed.
+
+        Returns:
+        - List[str]: A list of cooking tools commonly associated with the provided cooking action.
+        """
+        return self.get_action_tool_map().get(action, [])
