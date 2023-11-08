@@ -32,7 +32,8 @@ class DoublyLinkedList:
         output: str = ""
         count = 0
         while curr_node:
-            output += f"{count + 1}) {curr_node.get_instruction()}\n\n"
+            output += f"{count + 1}) {curr_node}\n\n"
+            output += f""
             curr_node: Instruction = curr_node.get_next()
             count += 1
         return output
@@ -106,14 +107,13 @@ class DoublyLinkedList:
         """
         self.__set_length(self.__length + 1)
 
-    def push(self, data: Optional["Instruction"]) -> None:
+    def push(self, new_node: Instruction) -> None:
         """
         Push a new node with data to the front of the list.
 
         Parameters:
         - data (Optional["Instruction"]): The data to be added to a new node.
         """
-        new_node: Instruction = Instruction(data)
 
         if self.get_head() is None:
             self.__set_head(new_node)
@@ -127,14 +127,13 @@ class DoublyLinkedList:
         self.__set_head(new_node)
         self.__increment_length()
 
-    def append(self, data: Optional["Instruction"]) -> None:
+    def append(self, new_node: Instruction) -> None:
         """
         Append a new node with data to the end of the list.
 
         Parameters:
         - data (Optional["Instruction"]): The data to be added to a new node.
         """
-        new_node: Instruction = Instruction(data)
 
         if self.get_head() is None:
             self.__set_head(new_node)
@@ -148,7 +147,7 @@ class DoublyLinkedList:
         self.__set_tail(new_node)
         self.__increment_length()
 
-    def insertAt(self, data: Optional["Instruction"], index: int) -> None:
+    def insertAt(self, new_node: Instruction, index: int) -> None:
         """
         Insert a new node with data at a specific index in the list.
 
@@ -159,8 +158,6 @@ class DoublyLinkedList:
         Raises:
         - IndexError: If the index is out of range.
         """
-        new_node: Instruction = Instruction(data)
-
         if index == 0:
             self.push(new_node)
             return

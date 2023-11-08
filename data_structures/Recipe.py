@@ -27,9 +27,7 @@ class Recipe:
         output += f"Recipe Ingredients:\n\n"
 
         for ingredient in self.get_ingredients().keys():
-            output += f"  - {ingredient}"
-
-            output += "\n\n"
+            output += f"  - {ingredient} \n\n"
 
         output += str(self.get_instructions())
 
