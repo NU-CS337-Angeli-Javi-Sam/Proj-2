@@ -1,4 +1,5 @@
 # from nltk
+from typing import List, Union
 from data_structures.ontologies.CookingActions import CookingActionsOntology
 from data_structures.ontologies.Ingredients import IngredientOntology
 from data_structures.ontologies.CookingTools import CookingToolsOntology
@@ -15,51 +16,55 @@ ingredients = IngredientOntology()
 tools = CookingToolsOntology()
 
 class Instruction(Node):
-    def __init__(self, instruction_sent):
+    def __init__(self, instruction_sent: str) -> None:
         # Give each Instruction __next and __prev variables
         super().__init__()
-
-        self.__tools = []
-        self.__ingredients = []
-        self.__cooking_actions = []
+        self.__instruction = instruction_sent
+        self.__tools = self.__set_tools(instruction_sent)
+        self.__ingredients = self.__set_ingredients(instruction_sent)
+        self.__cooking_actions = self.__set_cooking_actions(instruction_sent)
         self.__temperature = None
         self.__time = None
 
-        # Set variables
-        print(instruction_sent)
-        self.__set_cooking_actions(instruction_sent)
-        self.__set_ingredients(instruction_sent)
-        self.__set_tools(instruction_sent)
+    def get_instruction(self):
+        return self.__instruction
 
-    def __get_word_stem(self, word):
+    def __get_word_stem(self, word: str):
         return stemmer.stem(re.search(r'[A-Za-z]*', word).group(0))
 
-    def __annotate(self, instruction_sent, ontology, variable):
-        for word in instruction_sent.lower().split(" "):
+    def __annotate(self, instruction_sent: str, ontology: Union["CookingActionsOntology", "CookingToolsOntology", "IngredientOntology"]):
+        word_set = set()
+        for word in instruction_sent.split(" "):
             word_stem = self.__get_word_stem(word)
             if ontology.get_category(word_stem) != "Unknown":
-                variable.append(word_stem)
+                word_set.add(word_stem)
             elif ontology.get_category(word) != "Unknown": # word_stem might be weird
-                variable.append(word)
+                word_set.add(word)
             elif ontology.get_category(word_stem + 'e') != "Unknown": # word_stem might be weird
-                variable.append(word_stem + 'e')
+                word_set.add(word_stem + 'e')
 
-        return list(set(variable))
+        word_list = list(word_set)
+        return word_list
 
-    def __set_cooking_actions(self, instruction_sent):
-        self.__cooking_actions = self.__annotate(instruction_sent, cooking_actions, self.__cooking_actions)
+    def __set_cooking_actions(self, instruction_sent: str) -> None:
+        return self.__annotate(instruction_sent, cooking_actions)
 
-    def __set_ingredients(self, instruction_sent):
-        self.__ingredients = self.__annotate(instruction_sent, ingredients, self.__ingredients)
+    def __set_ingredients(self, instruction_sent: str) -> None:
+        return self.__annotate(instruction_sent, ingredients)
 
-    def __set_tools(self, instruction_sent):
-        self.__tools = self.__annotate(instruction_sent, tools, self.__tools)
+    def __set_tools(self, instruction_sent: str) -> None:
+        return self.__annotate(instruction_sent, tools)
 
-    def get_cooking_actions(self):
+    def get_cooking_actions(self) -> List["str"]:
         return self.__cooking_actions
 
-    def get_ingredients(self):
+    def get_ingredients(self) -> List["str"]:
         return self.__ingredients
 
-    def __str__(self):
-        return f"Cooking Tools: {self.__tools}\nIngredients: {self.__ingredients}\nCooking Actions: {self.__cooking_actions}\n\n"
+    def __str__(self) -> str:
+        output = f"{self.get_instruction()}\n\n"
+        output += f"Cooking Tools: {self.__tools}\n\n"
+        output += f"Ingredients: {self.__ingredients}\n\n"
+        output += f"Cooking Actions: {self.__cooking_actions}\n\n"
+
+        return output
