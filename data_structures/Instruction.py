@@ -6,7 +6,6 @@ from data_structures.ontologies.CookingTools import CookingToolsOntology
 from data_structures.Ingredient import Ingredient
 from data_structures.Node import Node
 from nltk.stem.snowball import SnowballStemmer
-from fuzzywuzzy import fuzz
 import re
 
 stemmer = SnowballStemmer("english")

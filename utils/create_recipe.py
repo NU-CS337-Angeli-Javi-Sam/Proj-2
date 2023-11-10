@@ -173,8 +173,23 @@ def parse_recipe_instruction(
             if len(extra_note.split("\n\nEditor's note: ")) == 2:
                 extra_note, _ = extra_note.split("\n\n")
                 recipe_prep_notes.append(extra_note)
+            elif len(extra_note.split("\n\nEditor’s note: ")) == 2:
+                extra_note, _ = extra_note.split("\n\n")
+                recipe_prep_notes.append(extra_note)
             else:
                 recipe_prep_notes.append(extra_note)
+
+
+
+        if len(instruction_text.split("\n\nEditor’s note: ")) == 2:
+
+            instruction_text, _ = instruction_text.split("\n\nEditor’s note: ")
+        elif len(instruction_text.split("\n\nEditor's note: ")) == 2:
+
+            instruction_text, _ = instruction_text.split("\n\nEditor's note: ")
+
+
+
 
         instruction_text = replace_abbreviations(instruction_text)
 
@@ -211,12 +226,12 @@ def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
 
 
 def get_and_set_recipe_cook_time(recipe: Recipe, recipe_data: Any) -> None:
-    recipe_cook_time: str = recipe_data["cookTime"]
-
+    # recipe_cook_time: str = recipe_data["cookTime"]
+    pass
 
 def get_and_set_recipe_total_time(recipe: Recipe, recipe_data: Any) -> None:
-    recipe_total_time: str = recipe_data["totalTime"]
-
+    # recipe_total_time: str = recipe_data["totalTime"]
+    pass
 
 def get_and_set_recipe_yield(recipe: Recipe, recipe_data: Any) -> None:
     # Not sure at the moment what to do with this/what exact data we wanna extract from this
