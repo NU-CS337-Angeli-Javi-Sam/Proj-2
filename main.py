@@ -32,8 +32,12 @@ def main() -> None:
     # Recipes to parse
     # ALL RECIPES MUST BE FROM https://www.epicurious.com/
     # url = 'https://www.epicurious.com/recipes/food/views/ba-syn-creamed-spinach-stuffed-meatloaf'
-    # url = 'https://www.epicurious.com/recipes/food/views/my-favorite-simple-roast-chicken-231348'
     url: str = "https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe"
+    # url = 'https://www.epicurious.com/recipes/food/views/fresh-cheese-with-spinach-102947'
+    # url = "https://www.epicurious.com/recipes/food/views/ba-syn-ropa-vieja"
+    # url = "https://www.epicurious.com/recipes/food/views/gulab-jamuns-in-rose-syrup"
+    # url = "https://www.epicurious.com/recipes/food/views/blueberry-cobbler"
+    # url = "https://www.epicurious.com/recipes/food/views/old-fashioned-235804"
 
     # Fetch the recipe from the Epicurious website
     recipe_webpage: Optional["str"] = fetch_recipe_from_website(url)
