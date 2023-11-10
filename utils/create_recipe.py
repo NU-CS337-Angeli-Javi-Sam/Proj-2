@@ -39,7 +39,7 @@ def create_recipe_ingredients_dict(
 
         parsed_ingredient: Ingredient = Ingredient(ingredient_sentence_tokens)
 
-        recipe_ingredients_dict[ingredient_sentence] = parsed_ingredient
+        recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
 
     return recipe_ingredients_dict
 
@@ -183,7 +183,7 @@ def parse_recipe_instruction(
         sentences: List["str"] = sent_tokenize(instruction_text)
 
         for sentence in sentences:
-            new_instruction: Instruction = Instruction(sentence)
+            new_instruction: Instruction = Instruction(sentence, recipe.get_ingredients())
             recipe_instructions.append(new_instruction)
 
     return recipe_instructions, recipe_prep_notes

@@ -1,8 +1,9 @@
 # from nltk
-from typing import List, Union
+from typing import List, Union, Dict
 from data_structures.ontologies.CookingActions import CookingActionsOntology
 from data_structures.ontologies.Ingredients import IngredientOntology
 from data_structures.ontologies.CookingTools import CookingToolsOntology
+from data_structures.Ingredient import Ingredient
 from data_structures.Node import Node
 from nltk.stem.snowball import SnowballStemmer
 from fuzzywuzzy import fuzz
@@ -16,12 +17,12 @@ ingredients = IngredientOntology()
 tools = CookingToolsOntology()
 
 class Instruction(Node):
-    def __init__(self, instruction_sent: str) -> None:
+    def __init__(self, instruction_sent: str, ingredients: Dict["str", "Ingredient"]) -> None:
         # Give each Instruction __next and __prev variables
         super().__init__()
         self.__instruction = instruction_sent
         self.__tools = self.__set_tools(instruction_sent)
-        self.__ingredients = self.__set_ingredients(instruction_sent)
+        self.__ingredients = self.__replace_ingredients(self.__set_ingredients(instruction_sent), ingredients)
         self.__cooking_actions = self.__set_cooking_actions(instruction_sent)
         self.__temperature = None
         self.__time = None
@@ -45,6 +46,14 @@ class Instruction(Node):
 
         word_list = list(word_set)
         return word_list
+
+    def __replace_ingredients(self, ingredient_names: List["str"], ingredients: Dict["str", "Ingredient"]):
+        ingredients_set = []
+        for ingredient_name in ingredient_names:
+            if ingredient_name in ingredients.keys():
+                ingredients_set.append(ingredients[ingredient_name])
+
+        return ingredients_set
 
     def __set_cooking_actions(self, instruction_sent: str) -> None:
         return self.__annotate(instruction_sent, cooking_actions)
