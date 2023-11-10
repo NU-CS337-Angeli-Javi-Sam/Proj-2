@@ -25,6 +25,7 @@ class Ingredient:
         self.__full_name = None
         self.__simplified_name = None
         self.__qualities = []
+        self.__original_text = ingredient_sent
 
         #Amount logic
         self.__quantity = None
@@ -39,6 +40,9 @@ class Ingredient:
 
     def get_full_name(self):
         return self.__full_name
+
+    def get_original_text(self):
+        return self.__original_text
 
     def get_simplified_name(self):
         return self.__simplified_name

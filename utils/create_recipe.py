@@ -9,7 +9,6 @@ from data_structures.ontologies.Measurements import MeasurementsOntology
 # nltk.download('punkt')
 measurements = MeasurementsOntology()
 
-
 def create_recipe_ingredients_dict(
     recipe_ingredients: List["str"],
 ) -> Dict["str", "Ingredient"]:

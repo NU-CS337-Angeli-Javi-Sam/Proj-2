@@ -69,6 +69,13 @@ class Instruction(Node):
     def get_ingredients(self) -> List["str"]:
         return self.__ingredients
 
+    def get_temperature(self) -> str:
+        return self.__temperature
+
+    def get_time(self) -> str:
+        return self.__time
+
+
     def __str__(self) -> str:
         output = f"{self.get_instruction()}\n\n"
         output += f"Cooking Tools: {self.__tools}\n\n"

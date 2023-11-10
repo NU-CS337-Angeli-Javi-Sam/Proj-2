@@ -56,10 +56,11 @@ def main() -> None:
     # Creates a Recipe object from the provided recipe data
     recipe: Recipe = create_recipe(recipe_data)
 
-    print(recipe)
+    # print(recipe)
 
     # Provide the Virtual Chef the recipe to use
     virtual_chef.set_recipe(recipe)
+    print(virtual_chef.get_query("how do i chop onions"))
 
 
 if __name__ == "__main__":
