@@ -192,7 +192,7 @@ class DoublyLinkedList:
         curr_node: Instruction = self.get_head()
         curr_node_index: int = 0
         while curr_node_index != index:
-            curr_node: Instruction = curr_node.get_next()
+            curr_node = curr_node.get_next()
             curr_node_index += 1
 
         return curr_node

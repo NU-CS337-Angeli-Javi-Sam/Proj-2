@@ -6,9 +6,9 @@ from data_structures.Instruction import Instruction
 
 class VirtualChef:
     def __init__(self) -> None:
-        self.__recipe = Recipe()
-        self.__curr_step = -1
-        self.__curr_instruction = "Please enter the recipe you'd like my help with."
+        self.__recipe: Recipe = Recipe()
+        self.__curr_step: int = 0
+        self.__curr_instruction: Instruction = None
 
 
     def handle_utterance(self, utterance: str) -> str:
@@ -52,7 +52,7 @@ class VirtualChef:
     def get_curr_step(self) -> int:
         return self.__curr_step
 
-    def get_curr_instruction(self) -> str:
+    def get_curr_instruction(self) -> Instruction:
         return self.__curr_instruction
 
     def set_recipe(self, recipe: Recipe) -> None:
@@ -71,7 +71,8 @@ class VirtualChef:
 
         self.__curr_instruction = curr_instruction
 
-    def get_next_instruction(self) -> str:
+    def get_next_instruction(self) -> Instruction:
+
         if self.get_curr_step() != self.get_recipe().get_instruction_count():
             self.set_curr_step(self.get_curr_step() + 1)
             self.set_curr_instruction(self.get_curr_step())
@@ -81,12 +82,14 @@ class VirtualChef:
 
         return self.get_curr_instruction()
 
-    def get_prev_instruction(self) -> str:
+    def get_prev_instruction(self) -> Instruction:
         if self.get_curr_step() != 0:
             self.set_curr_step(self.get_curr_step() - 1)
-            self.set_curr_instruction(self.get_curr_step())
+            self.set_curr_instruction()
         else:
-            self.set_curr_instruction("This is the first instruction of the recipe.")
+            self.set_curr_step(self.get_curr_step() - 1)
+            self.set_curr_instruction("This is the beginning of the recipe.")
+
 
         return self.get_curr_instruction()
 
@@ -127,7 +130,7 @@ class VirtualChef:
 
         return self.get_curr_instruction()
 
-    def get_instruction_at(self, index: int) -> str:
+    def get_instruction_at(self, index: int) -> Instruction:
         instruction = None
 
         try:
@@ -142,7 +145,7 @@ class VirtualChef:
         return self.get_curr_instruction()
 
     def get_all_ingredients(self) -> str:
-        ingredients = ''
+        ingredients = '\nIngredients:'
 
         for ingredient in self.get_recipe().get_ingredients().values():
             ingredients += f'\n\n - {ingredient.get_original_text()}'

@@ -130,7 +130,8 @@ class Recipe:
         Returns:
         - Instruction: An instance of the Instruction class representing the specified instruction.
         """
-        self.__instructions.get_data_at(index)
+        return self.get_instructions().get_node_at(index)
+
 
     def get_instruction_count(self) -> int:
         """
