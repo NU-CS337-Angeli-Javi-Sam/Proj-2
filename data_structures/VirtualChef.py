@@ -125,12 +125,7 @@ class VirtualChef:
                 response += 'Fortunately, there is no temperature requirement at this step.'
 
         elif 'how much' in match or 'how many' in match:
-            ingredient = ""
-            quantity = ""
-
             response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
-
-            response += f"This step requires this much {quantity} of {ingredient}."
 
             # Get the ingredient name only
             ingredient_regex = r'(?<=how many )[A-Za-z]*'
@@ -139,9 +134,16 @@ class VirtualChef:
             # Get all the ingredients in the current instruction
             ingredients_items = self.get_curr_instruction().get_ingredients()
 
+            # Fetch the quantity
+            quantity = -1
             for ingredient_name, ingredient_obj in ingredients_items.items():
                 if ingredient_match.group(0) in ingredient_obj.get_full_name():
-                    return str(ingredient_obj.get_quantity())+" "+ingredient_obj.get_full_name()
+                    quantity = ingredient_obj.get_quantity()
+                    response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
+
+            # Response if no quantity found
+            if quantity == -1:
+                response += f"I'm not sure how much {ingredient_match.group(0)} is required."
 
         elif 'how should' in match:
             prep_instruction = ""
