@@ -23,11 +23,27 @@ class Instruction(Node):
         self.__tools = self.__set_tools(instruction_sent)
         self.__ingredients = self.__replace_ingredients(self.__set_ingredients(instruction_sent), ingredients)
         self.__cooking_actions = self.__set_cooking_actions(instruction_sent)
-        self.__temperature = None
-        self.__time = None
+        self.__temperature = self.__get_temp(instruction_sent)
+        self.__time = self.__get_time(instruction_sent)
 
     def get_instruction(self):
         return self.__instruction
+
+    def __get_temp(self, instruction_sent: str):
+        # Check to see if there is an instance of hours, minutes or seconds
+        # if so, get the proceeding number(s)
+        time_regex = r'\d.*(°|degree)s?(C|F| Celsius| Fahrenheit)?'
+        match = re.search(time_regex, instruction_sent.lower())
+        if match:
+            return match.string
+
+    def __get_time(self, instruction_sent: str):
+        # Check to see if there is an instance of hours, minutes or seconds
+        # if so, get the proceeding number(s)
+        time_regex = r'\d.*(second|hour|minute)s?'
+        match = re.search(time_regex, instruction_sent)
+        if match:
+            return match.string
 
     def __get_word_stem(self, word: str):
         return stemmer.stem(re.search(r'[A-Za-z]*', word).group(0))
