@@ -69,12 +69,15 @@ class Instruction(Node):
         return word_list
 
     def __replace_ingredients(self, ingredient_names: List["str"], ingredients: Dict["str", "Ingredient"]):
-        ingredients_set = []
-        for ingredient_name in ingredient_names:
-            if ingredient_name in ingredients.keys():
-                ingredients_set.append(ingredients[ingredient_name])
+        ingredients_dict = {}
 
-        return ingredients_set
+        for ingredient_name in ingredient_names:
+            keys = ingredients.keys()
+            for key in keys:
+                if ingredient_name in key:
+                    ingredients_dict[key] = ingredients[key]
+
+        return ingredients_dict
 
     def __set_cooking_actions(self, instruction_sent: str) -> None:
         return self.__annotate(instruction_sent, cooking_actions)
