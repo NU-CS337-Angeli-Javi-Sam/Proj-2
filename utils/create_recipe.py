@@ -38,7 +38,11 @@ def create_recipe_ingredients_dict(
 
         parsed_ingredient: Ingredient = Ingredient(ingredient_sentence_tokens)
 
-        recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
+        if parsed_ingredient.get_simplified_name():
+            recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
+        else:
+            recipe_ingredients_dict[parsed_ingredient.get_original_text()] = parsed_ingredient
+
 
     return recipe_ingredients_dict
 
