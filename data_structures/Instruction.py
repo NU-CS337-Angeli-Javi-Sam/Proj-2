@@ -75,6 +75,8 @@ class Instruction(Node):
     def get_time(self) -> str:
         return self.__time
 
+    def get_tools(self) -> str:
+        return self.__tools
 
     def __str__(self) -> str:
         output = f"{self.get_instruction()}\n\n"
