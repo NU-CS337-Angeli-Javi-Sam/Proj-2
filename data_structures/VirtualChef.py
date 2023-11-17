@@ -14,7 +14,7 @@ class VirtualChef:
                   r'name.*recipe', r'recipe.*name'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
                             r'italian', r'mexican'],
-        'query': [r'what are', r'what is', r'how long', r'how much', r'how to', r'how do', r'how should']
+        'query': [r'what|how']
     }
 
     # Query for when we don't know how to answer the question
@@ -108,13 +108,25 @@ class VirtualChef:
 
         #Parameters
         if 'how long' in match:
-            time = self.get_recipe().get_instruction(self.get_curr_step()).get_time()
+            time = self.get_curr_instruction().get_time()
             if time:
                 response = time
             else:
                 response = 'No time at this step'
 
+            return response
+
+        elif 'how hot' in match or 'how cold' in match or 'what temperature' in match:
+            temperature = self.get_curr_instruction().get_temp()
+            if temperature:
+                response = temperature
+            else:
+                response = 'No temperature at this step'
+
+            return response
+
         elif 'how much' in match:
+
             #Quality for the ingredient they are talking about
             pass
 
