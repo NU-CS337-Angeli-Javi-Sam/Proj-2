@@ -11,7 +11,7 @@ class VirtualChef:
     contexts = {
         'navigation': [r'(go|take).*?:step', r'what is.*?:step', r'repeat.*?:step', r'next', r'back'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
-                  r'name.*recipe', r'recipe.*name'],
+                  r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
                             r'italian', r'mexican'],
         'query': [r'what|how']
@@ -80,14 +80,12 @@ class VirtualChef:
 
         #All Ingredients
         if 'ingredients' in match:
-            for ingredient in self.get_recipe().get_ingredients().values():
-                response += f'\n\n - {ingredient.get_original_text()}'
+            response += self.get_all_ingredients()
+
         #All Tools
         elif 'tools' in match or 'utensils' in match:
-            instructions_linked_list = self.get_recipe().get_instructions()
+            response += self.get_all_tools()
 
-            for index in range(0, instructions_linked_list.get_length()):
-                response += instructions_linked_list.get_node_at(index).get_tools() + ' \n'
         #All Steps
         elif 'step' in match:
             instructions_linked_list = self.get_recipe().get_instructions()
@@ -96,7 +94,7 @@ class VirtualChef:
                 response += instructions_linked_list.get_node_at(index).get_instruction() + ' \n'
         #Recipe Name
         elif 'name' in match and 'recipe' in match:
-            response =  self.get_recipe().get_name()
+            response += self.get_recipe().get_name()
 
         return response
 
@@ -109,35 +107,50 @@ class VirtualChef:
         #Parameters
         if 'how long' in match:
             time = self.get_curr_instruction().get_time()
+
+            response += "Timing is crucial in the kitchen, my friend. For this step, it's all about precision. Now, let me tell you, there's no one-size-fits-all answer; it depends on the dish and the technique. Keep a watchful eye, trust your instincts, and don't rush the process.\n\n"
             if time:
-                response = time
+                response += f"Do this step for about {time}."
             else:
-                response = 'No time at this step'
+                response = 'Fortunately, there is no time requirement at this step.'
 
-            return response
-
-        elif 'how hot' in match or 'how cold' in match or 'what temperature' in match:
+        elif 'what temp' in match or 'how hot' in match or 'how cold' in match or 'what temperature' in match:
             temperature = self.get_curr_instruction().get_temp()
-            if temperature:
-                response = temperature
-            else:
-                response = 'No temperature at this step'
 
-            return response
+            response += "Ah, temperature, the secret conductor of the culinary orchestra. For this step, precision is key. Now, the optimal temperature can vary depending on what we're cooking. If you're following a recipe, it should have a guideline.\n\n"
+
+            if temperature:
+                response += f"Perform this step at about {temperature}"
+            else:
+                response += 'Fortunately, there is no temperature requirement at this step.'
 
         elif 'how much' in match:
+            # quantity = self.get_curr_instruction().get_ingre()
+            ingredient = ""
+            quantity = ""
+
+            response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
+
+            response += f"This step requires this much {quantity} of {ingredient}."
 
             #Quality for the ingredient they are talking about
-            pass
 
         elif 'how should' in match:
+            prep_instruction = ""
+
+            response += "Ah, the art of preparation — a culinary journey in itself. How you prepare an ingredient can make all the difference. The devil, they say, is in the details. Now, for this step, it's about technique, finesse, and a touch of creativity.\n\n"
+
+            response += f"Do this: {prep_instruction}"
             #Modifier for the ingredient they are talking about
-            pass
+
+        if response != '':
+            return response
 
         response = "Hold on a moment, let me grab you a reference from the web to give you the most accurate and detailed information. The kitchen is like a treasure trove of knowledge, and we want to make sure we're slicing through it with precision. Just a brief moment, and we'll have your answer ready. Thanks for your patience!\n\n"
         if "what is" in match or "what are" in match:
             url = self.GOOGLE_URL + "+".join(query.split(" "))
             response += f"Here is a reference for your question: {url}"
+
         #Simple "What is" and Specific "How to"
         elif 'how to' in match or 'how do' in match or 'how should' in match:
             #Vague "How to"
@@ -217,3 +230,9 @@ class VirtualChef:
             ingredients += f'\n\n - {ingredient.get_original_text()}'
 
         return ingredients
+
+    def get_all_tools(self) -> str:
+        tools = '\nTools:'
+
+        for tool in self.get_recipe().get_tools().values():
+            tools += f'\n\n - {tool}'
