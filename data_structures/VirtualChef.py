@@ -19,6 +19,7 @@ class VirtualChef:
 
     # Query for when we don't know how to answer the question
     YOUTUBE_URL = "https://www.youtube.com/results?search_query="
+    GOOGLE_URL = "https://www.google.com/search?q="
 
     def __init__(self) -> None:
         self.__recipe: Recipe = Recipe()
@@ -121,14 +122,18 @@ class VirtualChef:
             #Modifier for the ingredient they are talking about
             pass
 
+        response = "Hold on a moment, let me grab you a reference from the web to give you the most accurate and detailed information. The kitchen is like a treasure trove of knowledge, and we want to make sure we're slicing through it with precision. Just a brief moment, and we'll have your answer ready. Thanks for your patience!\n\n"
+        if "what is" in match or "what are" in match:
+            url = self.GOOGLE_URL + "+".join(query.split(" "))
+            response += f"Here is a reference for your question: {url}"
         #Simple "What is" and Specific "How to"
-        if 'what is' in match or 'what are' in match or 'how to' in match or 'how do' in match or 'how should' in match:
+        elif 'how to' in match or 'how do' in match or 'how should' in match:
             #Vague "How to"
-            if 'how' in match:
-                if "that" in match or "this" in match or "do i" in match:
-                    query = 'how ' + self.get_curr_instruction().get_instruction()
+            if "that" in match or "this" in match:
+                query = 'how ' + self.get_curr_instruction().get_instruction()
 
-            response = self.YOUTUBE_URL + "+".join(query.split(" "))
+            url = self.YOUTUBE_URL + "+".join(query.split(" "))
+            response += f"Here is a reference for your question: {url}"
 
         return response
 
