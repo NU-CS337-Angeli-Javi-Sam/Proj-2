@@ -125,9 +125,10 @@ class VirtualChef:
                 response += 'Fortunately, there is no temperature requirement at this step.'
 
         elif 'how much' in match or 'how many' in match:
+            temp_query = query.replace(" of ", " ")
             # Get the ingredient name only
             ingredient_regex = r'(?<=(how many|how much) )[A-Za-z]*'
-            ingredient_match = re.search(ingredient_regex, query)
+            ingredient_match = re.search(ingredient_regex, temp_query)
 
             # Get all the ingredients in the current instruction
             ingredients_items = self.get_curr_instruction().get_ingredients()
