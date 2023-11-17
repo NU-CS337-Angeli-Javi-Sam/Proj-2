@@ -107,7 +107,7 @@ class VirtualChef:
 
         #Parameters
         if 'how long' in match:
-            time = self.get_recipe().get_instruction(self.get_curr_step(.get_time()
+            time = self.get_recipe().get_instruction(self.get_curr_step()).get_time()
             if time:
                 response = time
             else:
