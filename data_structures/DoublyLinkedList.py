@@ -190,6 +190,9 @@ class DoublyLinkedList:
             raise IndexError("Index is out of range")
 
         curr_node: Instruction = self.get_head()
+        if index == 0:
+            return curr_node
+
         curr_node_index: int = 0
         while curr_node_index != index:
             curr_node = curr_node.get_next()

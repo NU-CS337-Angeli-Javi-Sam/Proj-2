@@ -23,7 +23,7 @@ class VirtualChef:
 
     def __init__(self) -> None:
         self.__recipe: Recipe = Recipe()
-        self.__curr_step: int = 0
+        self.__curr_step: int = -1
         self.__curr_instruction: Instruction = None
 
     def handle_utterance(self, utterance: str) -> str:
@@ -201,7 +201,7 @@ class VirtualChef:
     def get_prev_instruction(self) -> Instruction:
         if self.get_curr_step() != 0:
             self.set_curr_step(self.get_curr_step() - 1)
-            self.set_curr_instruction()
+            self.set_curr_instruction(self.get_curr_step())
         else:
             self.set_curr_step(self.get_curr_step() - 1)
             self.set_curr_instruction("This is the beginning of the recipe.")
