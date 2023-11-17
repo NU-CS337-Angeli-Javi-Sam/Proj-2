@@ -93,7 +93,18 @@ def begin_cooking(virtual_chef: VirtualChef) -> None:
     while True:
         user_input: str = input("> ")
 
+        response: str = virtual_chef.handle_utterance(user_input)
 
+        if response == "break":
+            break
+
+
+def finish_cooking(virtual_chef: VirtualChef) -> None:
+    recipe_name: str = virtual_chef.get_recipe().get_name()
+
+    print(f"Bravo! You've conquered the first leg of our {recipe_name} expedition. I can almost smell the incredible aromas wafting from your kitchen. Now, take a moment to appreciate your culinary masterpiece.\n")
+
+    print("As we stand here with our finished dish, the real question is, how does it taste? Is it a symphony of flavors dancing on your taste buds, or does it need a little touch-up? Let me know how it turned out, and if you have any questions or if there's another culinary escapade you'd like to embark on. I'm here to guide you through the world of flavors. Well done, chef!")
 
 
 def main():
@@ -118,7 +129,7 @@ def main():
 
     begin_cooking(virtual_chef)
 
-
+    finish_cooking(virtual_chef)
 
 if __name__ == "__main__":
     main()
