@@ -238,5 +238,5 @@ class VirtualChef:
     def get_all_tools(self) -> str:
         tools = '\nTools:'
 
-        for tool in self.get_recipe().get_tools().values():
+        for tool in self.get_recipe().get_tools():
             tools += f'\n\n - {tool}'
