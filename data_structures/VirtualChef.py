@@ -9,7 +9,7 @@ import re
 class VirtualChef:
     # Utterances keywords in regex
     contexts = {
-        'navigation': [r'(go|take).*step.', r'what is.*step .', r'repeat.*step .', 'next.'],
+        'navigation': [r'(go|take).*?:step', r'what is.*?:step', r'repeat.*?:step', r'next', r'back'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
@@ -37,13 +37,13 @@ class VirtualChef:
                     response = ''
 
                     if context == 'navigation':
-                        response = self.__handle_navigation_utterance(match.group(0))
+                        response = self.__handle_navigation_utterance(match.string)
                     elif context == 'meta':
-                        response = self.__handle_meta_utterance(match.group(0))
+                        response = self.__handle_meta_utterance(match.string)
                     elif context == 'transformation':
-                        response = self.__handle_transformation_utterance(match.group(0))
+                        response = self.__handle_transformation_utterance(match.string)
                     elif context == 'query':
-                        response = self.__handle_query_utterance(match.group(0), utterance)
+                        response = self.__handle_query_utterance(match.string, utterance)
 
                     return response
 
@@ -53,20 +53,24 @@ class VirtualChef:
         response = ''
 
         #Direction
-        if 'go' in match or 'take' in match:
+        if 'next' in match:
+            response = self.get_next_instruction().get_instruction()
+        elif 'back' in match or 'previous' in match or 'prev' in match:
+            response = self.get_prev_instruction().get_instruction()
+        elif 'go' in match or 'take' in match:
             if 'next' in match:
-                response = self.get_next_instruction()
+                response = self.get_next_instruction().get_instruction()
             elif 'back' in match or 'previous' in match or 'prev' in match:
-                response = self.get_prev_instruction()
+                response = self.get_prev_instruction().get_instruction()
         elif 'repeat' in match:
-            response = self.get_curr_instruction()
+            response = self.get_curr_instruction().get_instruction()
         #Step index
         elif 'what is':
             number_regex = r'[0-9]+'
-            step_number = re.search(number_regex, match.group(0))
+            step_number = re.search(number_regex, match)
             if step_number:
                 self.set_curr_step(int(step_number))
-                response = self.get_instruction_at(int(step_number))
+                response = self.get_instruction_at(int(step_number)).get_instruction()
 
         return response
 
@@ -103,7 +107,7 @@ class VirtualChef:
 
         #Parameters
         if 'how long' in match:
-            time = self.get_recipe().get_instruction(self.get_curr_step()) .get_time()
+            time = self.get_recipe().get_instruction(self.get_curr_step(.get_time()
             if time:
                 response = time
             else:
@@ -121,10 +125,12 @@ class VirtualChef:
         if 'what is' in match or 'what are' in match or 'how to' in match or 'how do' in match or 'how should' in match:
             #Vague "How to"
             if 'how' in match:
-                if 'that' in match or 'this' in match:
-                    query = 'how' + self.get_curr_instruction()
+                if "that" in match or "this" in match or "do i" in match:
+                    query = 'how ' + self.get_curr_instruction().get_instruction()
 
-            response = self.YOUTUBE_URL + query.join('+')
+            response = self.YOUTUBE_URL + "+".join(query.split(" "))
+
+        return response
 
     def get_recipe(self) -> Recipe:
         return self.__recipe

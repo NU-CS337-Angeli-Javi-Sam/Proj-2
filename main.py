@@ -85,10 +85,10 @@ def prompt_user_to_begin(virtual_chef: VirtualChef) -> None:
 
 def begin_cooking(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
-    print(f"Great decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
+    print(f"\nGreat decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
     curr_instruction: Instruction = virtual_chef.get_next_instruction()
 
-    print(f"First step: {curr_instruction.get_instruction()}")
+    print(f"First step: {curr_instruction.get_instruction()}\n")
 
     while True:
         user_input: str = input("> ")
@@ -97,6 +97,8 @@ def begin_cooking(virtual_chef: VirtualChef) -> None:
 
         if response == "break":
             break
+
+        print(f"\n{response}\n")
 
 
 def finish_cooking(virtual_chef: VirtualChef) -> None:
@@ -122,8 +124,8 @@ def main():
         else:
             print("\n\nPlease input 1 or 2 corresponding to the following commands.")
 
-        print("\nPlease provide your input:")
-        print("[1] Go over ingredients list \n")
+        print("\nPlease provide your input:\n")
+        print("[1] Go over ingredients list")
         print("[2] Go over recipe steps.\n")
         response: int = input("> Command: ")
 
