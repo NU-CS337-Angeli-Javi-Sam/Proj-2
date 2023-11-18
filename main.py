@@ -103,7 +103,7 @@ def begin_cooking(virtual_chef: VirtualChef) -> None:
         if response == "break":
             break
 
-        print(f"{response}\n\n")
+        print(f"{response}")
 
 def finish_cooking(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()

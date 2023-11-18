@@ -14,7 +14,8 @@ class VirtualChef:
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
                             r'italian', r'mexican'],
-        'query': [r'what|how|when']
+        'query': [r'what|how|when'],
+        'generic': [r'thanks|okay|ok|ty|gotcha', r'thank you', '']
     }
 
     # Query for when we don't know how to answer the question
@@ -30,7 +31,7 @@ class VirtualChef:
         #Use regexes to filter the type of questions the user is asking
         utterance = utterance.lower()
 
-        response = ''
+        response = None
         for context, regex_list in self.contexts.items():
             match = None
             for regex in regex_list:
@@ -48,10 +49,12 @@ class VirtualChef:
                     response = self.__handle_transformation_utterance(match.string)
                 elif context == 'query':
                     response = self.__handle_query_utterance(match.string, utterance)
+                elif context == 'generic':
+                    response = ''
 
                 break
 
-        if response == '':
+        if response == None:
             return "I don't understand, idiot sandwich"
 
         return response
