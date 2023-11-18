@@ -64,11 +64,18 @@ class VirtualChef:
             response = self.get_next_instruction().get_instruction()
         elif 'back' in match or 'previous' in match or 'prev' in match:
             response = self.get_prev_instruction().get_instruction()
-        elif 'go' in match or 'take' in match:
+        elif 'go' in match:
             if 'next' in match:
                 response = self.get_next_instruction().get_instruction()
             elif 'back' in match or 'previous' in match or 'prev' in match:
                 response = self.get_prev_instruction().get_instruction()
+            elif 'to' in match:
+                number_regex = r'[0-9]+'
+                step_number = int(re.search(number_regex, match).group())
+                if step_number:
+                    self.set_curr_step(step_number - 1)
+                    self.set_curr_instruction(self.get_curr_step())
+                    response = self.get_curr_instruction()
         elif 'repeat' in match:
             response = self.get_curr_instruction().get_instruction()
         #Step index
@@ -77,7 +84,8 @@ class VirtualChef:
             step_number = int(re.search(number_regex, match).group())
             if step_number:
                 self.set_curr_step(step_number - 1)
-                response = self.get_instruction_at(step_number)
+                self.set_curr_instruction(self.get_curr_step())
+                response = self.get_curr_instruction()
 
         return response
 
@@ -94,10 +102,8 @@ class VirtualChef:
 
         #All Steps
         elif 'step' in match:
-            instructions_linked_list = self.get_recipe().get_instructions()
+            response += str(self.get_recipe().get_instructions())
 
-            for index in range(0, instructions_linked_list.get_length()):
-                response += instructions_linked_list.get_node_at(index).get_instruction() + ' \n'
         #Recipe Name
         elif 'name' in match and 'recipe' in match:
             response += self.get_recipe().get_name()
@@ -120,7 +126,8 @@ class VirtualChef:
             else:
                 response = 'Fortunately, there is no time requirement at this step.'
 
-        elif 'what temp' in match or 'how hot' in match or 'how cold' in match or 'what temperature' in match:
+        # need to test still
+        elif 'what temp' in match or 'how hot' in match or 'how cold' in match:
             temperature = self.get_curr_instruction().get_temp()
 
             response += "Ah, temperature, the secret conductor of the culinary orchestra. For this step, precision is key. Now, the optimal temperature can vary depending on what we're cooking. If you're following a recipe, it should have a guideline.\n\n"
@@ -130,6 +137,7 @@ class VirtualChef:
             else:
                 response += 'Fortunately, there is no temperature requirement at this step.'
 
+        # need to test still
         elif 'how much' in match or 'how many' in match:
             temp_query = query.replace(" of ", " ")
             # Get the ingredient name only
@@ -140,23 +148,24 @@ class VirtualChef:
             ingredients_items = self.get_curr_instruction().get_ingredients()
 
             # Fetch the quantity
-            if 'how much' in match or 'how many' in match:
-                response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
 
-                quantity = -1
-                for ingredient_obj in ingredients_items.values():
-                    if ingredient_match.group(0) in ingredient_obj.get_full_name():
-                        quantity = ingredient_obj.get_quantity()
-                        response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
+            response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
 
-                # Response if no quantity found
-                if quantity == -1:
-                    response += f"I'm not sure how much {ingredient_match.group(0)} is required."
+            quantity = -1
+            for ingredient_obj in ingredients_items.values():
+                if ingredient_match.group(0) in ingredient_obj.get_full_name():
+                    quantity = ingredient_obj.get_quantity()
+                    response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
+
+            # Response if no quantity found
+            if quantity == -1:
+                response += f"I'm not sure how much {ingredient_match.group(0)} is required."
 
         if response != '':
             return response
 
         response = "Hold on a moment, let me grab you a reference from the web to give you the most accurate and detailed information. The kitchen is like a treasure trove of knowledge, and we want to make sure we're slicing through it with precision. Just a brief moment, and we'll have your answer ready. Thanks for your patience!\n\n"
+
         if "what is" in match or "what are" in match:
             url = self.GOOGLE_URL + "+".join(query.split(" "))
             response += f"Here is a reference for your question: {url}"
