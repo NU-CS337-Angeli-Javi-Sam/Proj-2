@@ -105,8 +105,8 @@ class Instruction(Node):
 
     def __str__(self) -> str:
         output = f"{self.get_instruction()}\n\n"
-        output += f"Cooking Tools: {self.__tools}\n\n"
-        output += f"Ingredients: {self.__ingredients}\n\n"
-        output += f"Cooking Actions: {self.__cooking_actions}\n\n"
+        # output += f"Cooking Tools: {self.__tools}\n\n"
+        # output += f"Ingredients: {self.__ingredients}\n\n"
+        # output += f"Cooking Actions: {self.__cooking_actions}\n\n"
 
         return output

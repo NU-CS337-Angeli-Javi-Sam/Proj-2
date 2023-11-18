@@ -77,29 +77,33 @@ def process_recipe(virtual_chef: VirtualChef, recipe_url: str) -> None:
 def prompt_user_to_begin(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
     print(f"Ah, fantastic choice with {recipe_name}! Now, we're standing at the crossroads of culinary delight. Do you want to dive straight into the action and begin cooking, or would you prefer to review the ingredients first? The stage is set, and the choice is yours. Let me know, and we'll make this kitchen dance truly memorable!\n")
+
     print("[1] Go over ingredients list")
-    print("[2] Go over recipe steps\n")
+    print("[2] Go over recipe steps.")
+    print("[3] Begin cooking.\n")
 
     response = input("> Command: ")
+    print()
     return response
 
 def begin_cooking(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
-    print(f"\nGreat decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
+    print(f"Great decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
     curr_instruction: Instruction = virtual_chef.get_next_instruction()
 
-    print(f"First step: {curr_instruction.get_instruction()}\n")
+    print(f"{curr_instruction.get_instruction()}\n")
 
     while True:
-        user_input: str = input("> ")
+        print("Please provide a command.\n")
+        user_input: str = input("> Command: ")
+        print()
 
         response: str = virtual_chef.handle_utterance(user_input)
 
         if response == "break":
             break
 
-        print(f"\n{response}\n")
-
+        print(f"{response}")
 
 def finish_cooking(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
@@ -108,12 +112,12 @@ def finish_cooking(virtual_chef: VirtualChef) -> None:
 
     print("As we stand here with our finished dish, the real question is, how does it taste? Is it a symphony of flavors dancing on your taste buds, or does it need a little touch-up? Let me know how it turned out, and if you have any questions or if there's another culinary escapade you'd like to embark on. I'm here to guide you through the world of flavors. Well done, chef!")
 
-
 def main():
     virtual_chef: VirtualChef = initialize_virtual_chef()
     recipe_url: str = prompt_user_for_recipe()
+
     process_recipe(virtual_chef, recipe_url)
-    print(virtual_chef.get_recipe())
+
     response: str = prompt_user_to_begin(virtual_chef)
 
     while True:
@@ -121,14 +125,19 @@ def main():
             all_ingredients: str = virtual_chef.get_all_ingredients()
             print(all_ingredients)
         elif response.isnumeric() and int(response) == 2:
+            all_steps: str = virtual_chef.get_recipe().get_instructions()
+            print(all_steps)
+        elif response.isnumeric() and int(response) == 3:
             break
         else:
             print("\n\nPlease input 1 or 2 corresponding to the following commands.")
 
-        print("\nPlease provide your input:\n")
+        print("Please provide your input:\n")
         print("[1] Go over ingredients list")
-        print("[2] Go over recipe steps.\n")
+        print("[2] Go over recipe steps.")
+        print("[3] Begin cooking.\n")
         response: int = input("> Command: ")
+        print()
 
     begin_cooking(virtual_chef)
 

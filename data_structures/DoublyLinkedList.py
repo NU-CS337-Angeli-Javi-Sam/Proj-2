@@ -29,11 +29,11 @@ class DoublyLinkedList:
         - str: A string representation of the doubly linked list.
         """
         curr_node: Instruction = self.get_head()
-        output: str = ""
+        output: str = "All Steps:\n\n"
 
         count = 0
         while curr_node:
-            output += f"{count + 1}) {curr_node}\n\n"
+            output += f"{count + 1}) {curr_node}"
             curr_node: Instruction = curr_node.get_next()
             count += 1
         return output
