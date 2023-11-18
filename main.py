@@ -113,6 +113,7 @@ def main():
     virtual_chef: VirtualChef = initialize_virtual_chef()
     recipe_url: str = prompt_user_for_recipe()
     process_recipe(virtual_chef, recipe_url)
+    print(virtual_chef.get_recipe())
     response: str = prompt_user_to_begin(virtual_chef)
 
     while True:

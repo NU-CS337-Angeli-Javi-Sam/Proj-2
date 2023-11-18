@@ -9,7 +9,7 @@ import re
 class VirtualChef:
     # Utterances keywords in regex
     contexts = {
-        'navigation': [r'(go|take).*?:step', r'what is.*?:step', r'repeat.*?:step', r'next', r'back'],
+        'navigation': [r'(go|take).*?:step', r'what is.*?:step', r'repeat', r'next', r'back'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
