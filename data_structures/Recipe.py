@@ -93,6 +93,9 @@ class Recipe:
         """
         return self.get_ingredients()[ingredient_name]
 
+    def set_ingredients(self, ingredients):
+        self.__ingredients = ingredients
+
     def add_instruction(self, instruction: Instruction) -> None:
         """
         Add an instruction to the recipe.
@@ -112,7 +115,6 @@ class Recipe:
         for instruction in instructions:
             self.add_instruction(instruction)
 
-
     def get_instructions(self) -> DoublyLinkedList:
         """
         Get the instructions of the recipe.
@@ -121,6 +123,9 @@ class Recipe:
         - DoublyLinkedList: A doubly linked list containing the instructions of the recipe.
         """
         return self.__instructions
+
+    def set_instructions(self, instructions):
+        self.__instructions = instructions
 
     def get_instruction(self, index: int) -> Instruction:
         """
