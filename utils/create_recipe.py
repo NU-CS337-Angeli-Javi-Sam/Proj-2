@@ -227,6 +227,8 @@ def get_and_set_recipe_instructions(recipe: Recipe, recipe_data: Any) -> None:
 
     recipe.add_instructions(recipe_instructions)
 
+    recipe.add_tools()
+
 
 def get_and_set_recipe_cook_time(recipe: Recipe, recipe_data: Any) -> None:
     # recipe_cook_time: str = recipe_data["cookTime"]

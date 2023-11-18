@@ -13,6 +13,7 @@ class Recipe:
         self.__name = ""
         self.__ingredients = {}
         self.__instructions = DoublyLinkedList()
+        self.__tools = []
         # self.__cook_time = {}
         # self.__total_time = {}
 
@@ -111,6 +112,7 @@ class Recipe:
         for instruction in instructions:
             self.add_instruction(instruction)
 
+
     def get_instructions(self) -> DoublyLinkedList:
         """
         Get the instructions of the recipe.
@@ -142,6 +144,24 @@ class Recipe:
         """
         return self.__instructions.get_length()
 
+
+    def add_tools(self):
+        """
+        Using instructions within recipe, collect all the tools from every instruction into
+        a tools list
+        """
+        if self.__instructions.get_length() > 0:
+            for index in range(0, self.__instructions.get_length()):
+                self.__tools.extend(self.__instructions.get_node_at(index).get_tools())
+
+        self.__tools = set(self.__tools)
+
+    def get_tools(self):
+        """
+        Returns:
+            tools list
+        """
+        return self.__tools
 
     #
     #

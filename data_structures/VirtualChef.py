@@ -247,4 +247,8 @@ class VirtualChef:
         for tool in self.get_recipe().get_tools():
             tools += f'\n\n - {tool}'
 
+<<<<<<< Updated upstream
         return tools
+=======
+        return tools
+>>>>>>> Stashed changes
