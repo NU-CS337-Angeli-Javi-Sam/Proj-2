@@ -159,22 +159,28 @@ class VirtualChef:
             ingredient_regex = r'(?<=(how many|how much) )[A-Za-z]*'
             ingredient_match = re.search(ingredient_regex, temp_query)
 
-            # Get all the ingredients in the current instruction
-            ingredients_items = self.get_curr_instruction().get_ingredients()
+            if not ingredient_match:
+                response += "I'm not sure what you want me to retrieve. Try again."
 
-            # Fetch the quantity
+            else:
 
-            response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
+                # Get all the ingredients in the current instruction
+                ingredients_items = self.get_curr_instruction().get_ingredients()
 
-            quantity = -1
-            for ingredient_obj in ingredients_items.values():
-                if ingredient_match.group(0) in ingredient_obj.get_full_name():
-                    quantity = ingredient_obj.get_quantity()
-                    response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
+                # Fetch the quantity
 
-            # Response if no quantity found
-            if quantity == -1:
-                response += f"I'm not sure how much {ingredient_match.group(0)} is required."
+                response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
+
+                quantity = -1
+                for ingredient_obj in ingredients_items.values():
+
+                    if ingredient_match.group() in ingredient_obj.get_full_name():
+                        quantity = ingredient_obj.get_quantity()
+                        response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
+
+                # Response if no quantity found
+                if quantity == -1:
+                    response += f"I'm not sure how much {ingredient_match.group()} is required."
 
         if response != '':
             return response
