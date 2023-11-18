@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict, List, Tuple
 from nltk.tokenize import sent_tokenize
 
@@ -191,9 +192,6 @@ def parse_recipe_instruction(
 
             instruction_text, _ = instruction_text.split("\n\nEditor's note: ")
 
-
-
-
         instruction_text = replace_abbreviations(instruction_text)
 
         # instruction_text = replace_ingredients(recipe_ingredients, instruction_text)
@@ -201,6 +199,8 @@ def parse_recipe_instruction(
         sentences: List["str"] = sent_tokenize(instruction_text)
 
         for sentence in sentences:
+            if re.search(r'^\(.*\)$', sentence) != None:
+                continue
             new_instruction: Instruction = Instruction(sentence, recipe.get_ingredients())
             recipe_instructions.append(new_instruction)
 
