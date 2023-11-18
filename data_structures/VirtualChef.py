@@ -14,7 +14,7 @@ class VirtualChef:
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
                             r'italian', r'mexican'],
-        'query': [r'what|how']
+        'query': [r'what|how|when']
     }
 
     # Query for when we don't know how to answer the question
@@ -129,7 +129,7 @@ class VirtualChef:
         response = ''
 
         #Parameters
-        if 'how long' in match:
+        if 'how long' in match or "when is" in match:
             time = self.get_curr_instruction().get_time()
 
             response += "Timing is crucial in the kitchen, my friend. For this step, it's all about precision. Now, let me tell you, there's no one-size-fits-all answer; it depends on the dish and the technique. Keep a watchful eye, trust your instincts, and don't rush the process.\n\n"
