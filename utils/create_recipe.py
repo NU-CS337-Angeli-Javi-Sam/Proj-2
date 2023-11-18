@@ -37,6 +37,7 @@ def create_recipe_ingredients_dict(
         ingredient_sentence_tokens = sent_tokenize(ingredient_sentence)[0]
 
         parsed_ingredient: Ingredient = Ingredient(ingredient_sentence_tokens)
+        print(parsed_ingredient)
 
         if parsed_ingredient.get_simplified_name():
             recipe_ingredients_dict[parsed_ingredient.get_simplified_name()] = parsed_ingredient
@@ -106,6 +107,7 @@ def get_and_set_recipe_ingredients(recipe: Recipe, recipe_data: Any) -> None:
 
     for ingredient in recipe_data["recipeIngredient"]:
         recipe_ingredients.append(ingredient)
+        print(ingredient)
 
     recipe_ingredients_dict: Dict["str", "Ingredient"] = create_recipe_ingredients_dict(
         recipe_ingredients

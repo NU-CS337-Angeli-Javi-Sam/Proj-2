@@ -58,7 +58,7 @@ class MeasurementsOntology:
             "drizzle": ["drizzle", "drizzles"],
             "splash": ["splash", "splashes"],
             "shot": ["shot", "shots"],
-            "a touch of": ["a touch of"],
+            "a touch of": ["a touch"],
             "serving": ["serving", "servings"],
             "loaf": ["loaf", "loaves"],
             "sheet": ["sheet", "sheets"],
