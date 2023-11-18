@@ -9,7 +9,7 @@ import re
 class VirtualChef:
     # Utterances keywords in regex
     contexts = {
-        'navigation': [r'(go|take).*?:step', r'what is.*?:step', r'repeat', r'next', r'back'],
+        'navigation': [r'(go|take).*step.*', r'what is.*step.*', r'repeat', r'next', r'back'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
@@ -30,25 +30,31 @@ class VirtualChef:
         #Use regexes to filter the type of questions the user is asking
         utterance = utterance.lower()
 
+        response = ''
         for context, regex_list in self.contexts.items():
+            match = None
             for regex in regex_list:
                 match = re.search(regex, utterance)
 
-                if match:
-                    response = ''
+                if match != None:
+                    break
 
-                    if context == 'navigation':
-                        response = self.__handle_navigation_utterance(match.string)
-                    elif context == 'meta':
-                        response = self.__handle_meta_utterance(match.string)
-                    elif context == 'transformation':
-                        response = self.__handle_transformation_utterance(match.string)
-                    elif context == 'query':
-                        response = self.__handle_query_utterance(match.string, utterance)
+            if match != None:
+                if context == 'navigation':
+                    response = self.__handle_navigation_utterance(match.string)
+                elif context == 'meta':
+                    response = self.__handle_meta_utterance(match.string)
+                elif context == 'transformation':
+                    response = self.__handle_transformation_utterance(match.string)
+                elif context == 'query':
+                    response = self.__handle_query_utterance(match.string, utterance)
 
-                    return response
+                break
 
-        return "I don't understand, idiot sandwich"
+        if response == '':
+            return "I don't understand, idiot sandwich"
+
+        return response
 
     def __handle_navigation_utterance(self, match):
         response = ''
@@ -68,10 +74,10 @@ class VirtualChef:
         #Step index
         elif 'what is':
             number_regex = r'[0-9]+'
-            step_number = re.search(number_regex, match)
+            step_number = int(re.search(number_regex, match).group())
             if step_number:
-                self.set_curr_step(int(step_number))
-                response = self.get_instruction_at(int(step_number)).get_instruction()
+                self.set_curr_step(step_number - 1)
+                response = self.get_instruction_at(step_number)
 
         return response
 
@@ -138,7 +144,7 @@ class VirtualChef:
                 response += "Ah, the dance of measurements—the heartbeat of precision in the kitchen. When it comes to 'how much,' it's a delicate balance. The right amount can make or break a dish. If you're following a recipe, it should lay out the quantities for you.\n\n"
 
                 quantity = -1
-                for ingredient_name, ingredient_obj in ingredients_items.items():
+                for ingredient_obj in ingredients_items.values():
                     if ingredient_match.group(0) in ingredient_obj.get_full_name():
                         quantity = ingredient_obj.get_quantity()
                         response += f"This step requires {quantity} {ingredient_obj.get_full_name()}."
@@ -159,7 +165,7 @@ class VirtualChef:
         elif 'how to' in match or 'how do' in match or 'how should' in match:
             #Vague "How to"
             if "that" in match or "this" in match:
-                query = 'how ' + self.get_curr_instruction().get_instruction()
+                query = 'how to ' + self.get_curr_instruction().get_instruction().lower()
 
             url = self.YOUTUBE_URL + "+".join(query.split(" "))
             response += f"Here is a reference for your question: {url}"
@@ -228,10 +234,10 @@ class VirtualChef:
         return self.get_curr_instruction()
 
     def get_all_ingredients(self) -> str:
-        ingredients = '\nIngredients:'
+        ingredients = 'Ingredients:\n\n'
 
         for ingredient in self.get_recipe().get_ingredients().values():
-            ingredients += f'\n\n - {ingredient.get_original_text()}'
+            ingredients += f'- {ingredient.get_original_text()}\n\n'
 
         return ingredients
 
@@ -240,3 +246,5 @@ class VirtualChef:
 
         for tool in self.get_recipe().get_tools():
             tools += f'\n\n - {tool}'
+
+        return tools
