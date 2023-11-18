@@ -74,6 +74,8 @@ def process_recipe(virtual_chef: VirtualChef, recipe_url: str) -> None:
     # Provide the Virtual Chef the recipe to use
     virtual_chef.set_recipe(recipe)
 
+    return recipe_data
+
 def prompt_user_to_begin(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
     print(f"Ah, fantastic choice with {recipe_name}! Now, we're standing at the crossroads of culinary delight. Do you want to dive straight into the action and begin cooking, or would you prefer to review the ingredients first? The stage is set, and the choice is yours. Let me know, and we'll make this kitchen dance truly memorable!\n")
@@ -86,7 +88,7 @@ def prompt_user_to_begin(virtual_chef: VirtualChef) -> None:
     print()
     return response
 
-def begin_cooking(virtual_chef: VirtualChef) -> None:
+def begin_cooking(virtual_chef: VirtualChef, recipe_data) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
     print(f"Great decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
     curr_instruction: Instruction = virtual_chef.get_next_instruction()
@@ -98,7 +100,7 @@ def begin_cooking(virtual_chef: VirtualChef) -> None:
         user_input: str = input("> Command: ")
         print()
 
-        response: str = virtual_chef.handle_utterance(user_input)
+        response: str = virtual_chef.handle_utterance(user_input, recipe_data)
 
         if response == "break":
             break
@@ -116,7 +118,7 @@ def main():
     virtual_chef: VirtualChef = initialize_virtual_chef()
     recipe_url: str = prompt_user_for_recipe()
 
-    process_recipe(virtual_chef, recipe_url)
+    recipe_data = process_recipe(virtual_chef, recipe_url)
 
     response: str = prompt_user_to_begin(virtual_chef)
 
@@ -139,7 +141,7 @@ def main():
         response: int = input("> Command: ")
         print()
 
-    begin_cooking(virtual_chef)
+    begin_cooking(virtual_chef, recipe_data)
 
     finish_cooking(virtual_chef)
 

@@ -27,7 +27,7 @@ class VirtualChef:
         self.__curr_step: int = -1
         self.__curr_instruction: Instruction = None
 
-    def handle_utterance(self, utterance: str) -> str:
+    def handle_utterance(self, utterance: str, recipe_data) -> str:
         #Use regexes to filter the type of questions the user is asking
         utterance = utterance.lower()
 
@@ -46,7 +46,7 @@ class VirtualChef:
                 elif context == 'meta':
                     response = self.__handle_meta_utterance(match.string)
                 elif context == 'transformation':
-                    response = self.__handle_transformation_utterance(match.string)
+                    response = self.__handle_transformation_utterance(match.string, recipe_data)
                 elif context == 'query':
                     response = self.__handle_query_utterance(match.string, utterance)
                 elif context == 'generic':
@@ -125,7 +125,7 @@ class VirtualChef:
 
         return response
 
-    def __handle_transformation_utterance(self, match):
+    def __handle_transformation_utterance(self, match, recipe_data):
         pass
 
     def __handle_query_utterance(self, match, query):
