@@ -14,16 +14,17 @@ class IngredientOntology:
         }
         """
         self.categories = {
-            "Fruits": ["apple", "banana", "orange", "strawberry", "kiwi", "mango", "grape", "lemon", "blueberry", "watermelon"],
-            "Vegetables": ["carrot", "broccoli", "spinach", "zucchini", "potato", "onion", "tomato", "bell pepper", "cucumber", "mushroom", "garlic"],
-            "Proteins": ["chicken", "beef", "salmon", "tofu", "shrimp", "pork", "lamb", "turkey", "egg", "bacon"],
-            "Grains": ["rice", "pasta", "quinoa", "oats", "barley", "couscous", "bulgur", "bread", "corn", "wheat"],
-            "Dairy": ["milk", "cheese", "yogurt", "butter", "cream", "eggnog", "sour cream", "cream cheese", "cottage cheese", "whipped cream"],
-            "Herbs and Spices": ["basil", "thyme", "rosemary", "cumin", "coriander", "cinnamon", "paprika", "ginger", "nutmeg", "oregano", "pepper", "salt"],
-            "Oils and Condiments": ["olive oil", "soy sauce", "vinegar", "ketchup", "mayonnaise", "mustard", "hot sauce", "honey", "maple syrup", "sesame oil"],
-            "Canned and Packaged": ["canned tomatoes", "canned beans", "chicken broth", "coconut milk", "pasta sauce", "cereal", "canned tuna", "peanut butter", "instant noodles", "canned vegetables"],
-            "Nuts and Seeds": ["almonds", "walnuts", "sunflower seeds", "flaxseeds", "cashews", "peanuts", "sesame seeds", "pumpkin seeds", "chia seeds", "pecans"],
-            "Sweets and Desserts": ["sugar", "chocolate", "vanilla extract", "honey", "caramel", "marshmallows", "cookies", "cake", "ice cream", "candies"],
+            "Canned and Packaged": ["canned tomato", "canned bean", "chicken broth", "coconut milk", "pasta sauce", "cereal", "canned tuna", "peanut butter", "instant noodle", "canned vegetable", "milk powder"],
+            "Fruits": ["apple", "banana", "orange", "strawberr", "kiwi", "mango", "grape", "lemon", "blueberr", "watermelon", "cherr"],
+            "Vegetables": ["carrot", "olive", "broccoli", "spinach", "zucchini", "potato", "red onion", "yellow onion", "onion", "tomato", "bell pepper", "cucumber", "mushroom", "garlic powder", "garlic"],
+            "Proteins": ["beans", "chicken", "beef", "brisket", "salmon", "tuna", "tilapia", "shellfish", "tofu", "shrimp", "pork", "lamb", "turkey", "egg", "bacon", "cod", "mackerel", "crab", "lobster", "sardine"],
+            "Grains": ["flour", "semolina", "rice", "pasta", "quinoa", "oats", "barley", "couscous", "bulgur", "bread", "corn", "wheat", "panko"],
+            "Dairy": ["cream cheese", "sour cream", "cottage cheese", "whipped cream", "cheddar", "milk", "cheese", "yogurt", "butter", "cream", "eggnog", "paneer"],
+            "Herbs and Spices": ["basil", "thyme", "rosemary", "cumin", "cilantro", "cardamom", "coriander", "cinnamon", "paprika", "ginger", "nutmeg", "oregano", "pepper", "salt", "parsley", "turmeric", "chile powder", "asafetida powder", "bay leaves"],
+            "Cooking Mediums and Condiments": ["water", "broth", "olive oil", "vegetable oil", "soy sauce", "baking powder", "vinegar", "ketchup", "mayonnaise", "mustard", "hot sauce", "honey", "maple syrup", "sesame oil", "ghee"],
+            "Liquor": ["wine", "bitter", "simple syrup", "rye", "bourbon", "rum", "vodka", "whiskey"],
+            "Nuts and Seeds": ["almond", "walnut", "sunflower seed", "flaxseed", "cashew", "peanut", "sesame seed", "pumpkin seed", "chia seed", "pecan", "pistachio"],
+            "Sweets and Desserts": ["sugar", "chocolate", "vanilla extract", "honey", "caramel", "marshmallows", "cookies", "cake", "ice cream", "cand"],
         }
 
         self.lexicon = {}
