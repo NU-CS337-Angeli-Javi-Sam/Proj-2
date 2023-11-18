@@ -61,17 +61,23 @@ class VirtualChef:
 
         #Direction
         if 'next' in match:
-            response = self.get_next_instruction().get_instruction()
+            response = self.get_next_instruction()
         elif 'back' in match or 'previous' in match or 'prev' in match:
-            response = self.get_prev_instruction().get_instruction()
+            response = self.get_prev_instruction()
         elif 'go' in match:
             if 'next' in match:
                 response = self.get_next_instruction().get_instruction()
             elif 'back' in match or 'previous' in match or 'prev' in match:
                 response = self.get_prev_instruction().get_instruction()
             elif 'to' in match:
-                number_regex = r'[0-9]+'
-                step_number = int(re.search(number_regex, match).group())
+                if "last" in match:
+                    step_number = self.get_recipe().get_instruction_count()
+                elif "first" in match:
+                    step_number = 1
+                else:
+                    number_regex = r'[0-9]+'
+                    step_number = int(re.search(number_regex, match).group())
+
                 if step_number:
                     self.set_curr_step(step_number - 1)
                     self.set_curr_instruction(self.get_curr_step())
@@ -79,9 +85,15 @@ class VirtualChef:
         elif 'repeat' in match:
             response = self.get_curr_instruction().get_instruction()
         #Step index
-        elif 'what is':
-            number_regex = r'[0-9]+'
-            step_number = int(re.search(number_regex, match).group())
+        elif 'what is' in match:
+            if "last" in match:
+                step_number = self.get_recipe().get_instruction_count()
+            elif "first" in match:
+                step_number = 1
+            else:
+                number_regex = r'[0-9]+'
+                step_number = int(re.search(number_regex, match).group())
+
             if step_number:
                 self.set_curr_step(step_number - 1)
                 self.set_curr_instruction(self.get_curr_step())
@@ -208,12 +220,11 @@ class VirtualChef:
 
     def get_next_instruction(self) -> Instruction:
 
-        if self.get_curr_step() != self.get_recipe().get_instruction_count():
+        if self.get_curr_step() != self.get_recipe().get_instruction_count() - 1:
             self.set_curr_step(self.get_curr_step() + 1)
             self.set_curr_instruction(self.get_curr_step())
         else:
-            self.set_curr_step(self.get_curr_step() + 1)
-            self.set_curr_instruction("You've reached the end of the recipe.")
+            print("This is the last step of the recipe.\n\n")
 
         return self.get_curr_instruction()
 
@@ -222,8 +233,7 @@ class VirtualChef:
             self.set_curr_step(self.get_curr_step() - 1)
             self.set_curr_instruction(self.get_curr_step())
         else:
-            self.set_curr_step(self.get_curr_step() - 1)
-            self.set_curr_instruction("This is the beginning of the recipe.")
+            print("This is the beginning of the recipe.\n\n")
 
 
         return self.get_curr_instruction()

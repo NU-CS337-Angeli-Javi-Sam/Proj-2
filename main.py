@@ -91,7 +91,7 @@ def begin_cooking(virtual_chef: VirtualChef) -> None:
     print(f"Great decision! We're not wasting any time. Now, let's roll up those sleeves and get started on this {recipe_name} adventure.\n")
     curr_instruction: Instruction = virtual_chef.get_next_instruction()
 
-    print(f"First step: {curr_instruction.get_instruction()}\n")
+    print(f"{curr_instruction.get_instruction()}\n")
 
     while True:
         print("Please provide a command.\n")
