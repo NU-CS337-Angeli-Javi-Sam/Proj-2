@@ -26,22 +26,19 @@ class Instruction(Node):
         self.__temperature = self.__set_temp(instruction_sent)
         self.__time = self.__set_time(instruction_sent)
 
-    def get_instruction(self):
-        return self.__instruction
-
-    def get_temp(self):
-        return self.__temperature
-
-    def get_time(self):
-        return self.__time
-
     def __set_temp(self, instruction_sent: str):
-        # Check to see if there is an instance of hours, minutes or seconds
-        # if so, get the proceeding number(s)
-        time_regex = r'\d.*(°|degree)s?(C|F| Celsius| Fahrenheit)?'
-        match = re.search(time_regex, instruction_sent.lower())
-        if match:
+        # Prioritize temperatures listed as numbers
+        temp_regex = r'\d.*(°|degree)s?(C|F| Celsius| Fahrenheit)?'
+        match = re.search(temp_regex, instruction_sent.lower())
+        if match: 
             return match.group(0)
+
+        # If no numbers found, just get temperature-like word(s)
+        else:
+            temp_word_regexes = ['heat', 'cool', 'chill', 'freeze', "warm"]
+            for word in temp_word_regexes:
+                if word in instruction_sent:
+                    return word
 
     def __set_time(self, instruction_sent: str):
         # Check to see if there is an instance of hours, minutes or seconds
@@ -94,14 +91,17 @@ class Instruction(Node):
     def get_ingredients(self) -> List["str"]:
         return self.__ingredients
 
-    def get_temperature(self) -> str:
-        return self.__temperature
-
     def get_time(self) -> str:
         return self.__time
 
     def get_tools(self) -> str:
         return self.__tools
+
+    def get_instruction(self):
+        return self.__instruction
+
+    def get_temp(self) -> str:
+        return self.__temperature
 
     def __str__(self) -> str:
         output = f"{self.get_instruction()}\n\n"
