@@ -33,12 +33,14 @@ class Instruction(Node):
         if match: 
             return match.group(0)
 
-        # If no numbers found, just get temperature-like word(s)
+        # If no numbers found, just get "heat"-like word(s)
         else:
-            temp_word_regexes = ['heat', 'cool', 'chill', 'freeze', "warm"]
-            for word in temp_word_regexes:
-                if word in instruction_sent:
-                    return word
+            temp_word_regex = r'((high|low|medium|no|medium-low|medium-high|steady|rapid|moderate) )?heat'
+            match = re.search(temp_word_regex, instruction_sent.lower())
+            if match: 
+                return match.group(0)
+
+        return None
 
     def __set_time(self, instruction_sent: str):
         # Check to see if there is an instance of hours, minutes or seconds
