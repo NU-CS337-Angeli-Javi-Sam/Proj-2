@@ -14,7 +14,7 @@ class VirtualChef:
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
-                            r'italian', r'mexican', r'imperial', r'metric'],
+                            r'italian', r'mexican', r'imperial', r'metric', r'test'],
         'query': [r'what|how|when'],
         'generic': [r'thanks|okay|ok|ty|gotcha', r'thank you', '']
     }
@@ -135,14 +135,25 @@ class VirtualChef:
         # Create a new recipe based on this
         # Set this new recipe as our current one and update the step
         # Allow a list of variations if the person uses multiple keywords
+        recipe = None
+        response = ''
+        new_variation = ''
 
-        for variation in ['vegetarian', 'mexican', 'healthy', 'halal', 'kosher', 'metric', 'imperial']:
+        for variation in ['vegetarian', 'mexican', 'healthy', 'halal', 'kosher', 'metric', 'imperial', 'test']:
             if variation in match:
+                new_variation = variation
                 recipe = substitute_recipe(variation, recipe_data, self.get_recipe())
 
-        #Set recipe and update step
+        if recipe:
+            self.set_recipe(recipe)
+            self.set_curr_instruction(self.get_curr_step())
 
-        return ''
+            if new_variation == 'metric' or new_variation == 'imperial':
+                response = f"Ah, tinkering with the measurements, are we? Well, that's a bold move! If you're going {new_variation}, grab yourself a set of bloody accurate scales, none of that eyeballing nonsense. Precision is the key, my friend! \n\n {self.get_curr_instruction()}"
+            else:
+                response = f"Oi, are you trying to turn my masterpiece into a {new_variation} delight? Brilliant! Let's give it a go, shall we! \n\n {self.get_curr_instruction()}"
+
+        return response
 
     def __handle_query_utterance(self, match, query):
         response = ''
