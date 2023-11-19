@@ -31,14 +31,14 @@ class Instruction(Node):
         temp_regex = r'\d.*(°|degree)s?(C|F| Celsius| Fahrenheit)?'
         match = re.search(temp_regex, instruction_sent.lower())
         if match: 
-            return match.group(0)
+            return match.group()
 
         # If no numbers found, just get "heat"-like word(s)
         else:
             temp_word_regex = r'((high|low|medium|no|medium-low|medium-high|steady|rapid|moderate) )?heat'
             match = re.search(temp_word_regex, instruction_sent.lower())
             if match: 
-                return match.group(0)
+                return match.group()
 
         return None
 
