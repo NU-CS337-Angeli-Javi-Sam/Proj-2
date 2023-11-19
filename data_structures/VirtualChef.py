@@ -2,6 +2,7 @@ from typing import Union
 
 from data_structures.Recipe import Recipe
 from data_structures.Instruction import Instruction
+from data_structures.RecipeSubstitutions import substitute_recipe
 
 import re
 
@@ -13,7 +14,7 @@ class VirtualChef:
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
-                            r'italian', r'mexican'],
+                            r'italian', r'mexican', r'imperial', r'metric'],
         'query': [r'what|how|when'],
         'generic': [r'thanks|okay|ok|ty|gotcha', r'thank you', '']
     }
@@ -126,7 +127,22 @@ class VirtualChef:
         return response
 
     def __handle_transformation_utterance(self, match, recipe_data):
-        pass
+        #Call get instruction again after creating and set instruction
+
+        #https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe
+
+        # Extract what the variation is
+        # Create a new recipe based on this
+        # Set this new recipe as our current one and update the step
+        # Allow a list of variations if the person uses multiple keywords
+
+        for variation in ['vegetarian', 'mexican', 'healthy', 'halal', 'kosher', 'metric', 'imperial']:
+            if variation in match:
+                recipe = substitute_recipe(variation, recipe_data, self.get_recipe())
+
+        #Set recipe and update step
+
+        return ''
 
     def __handle_query_utterance(self, match, query):
         response = ''
