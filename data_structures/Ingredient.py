@@ -31,6 +31,8 @@ class Ingredient:
        
         # Amount logic
         self.__quantity = self.__set_quantity(ingredient_sent)
+
+        # Qualities
         self.__qualities = self.__set_qualities(ingredient_sent)
 
     def __get_word_stem(self, word):

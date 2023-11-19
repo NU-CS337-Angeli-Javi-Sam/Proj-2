@@ -25,6 +25,13 @@ class Instruction(Node):
         self.__cooking_actions = self.__set_cooking_actions(instruction_sent)
         self.__temperature = self.__set_temp(instruction_sent)
         self.__time = self.__set_time(instruction_sent)
+        self.__done_criterion = self.__set_done_criterion(instruction_sent)
+
+    def __set_done_criterion(self, instruction_sent: str):
+        done_regex = r'until [A-Za-z\s]*'
+        match = re.search(done_regex, instruction_sent.lower())
+        if match: 
+            return match.group()
 
     def __set_temp(self, instruction_sent: str):
         # Prioritize temperatures listed as numbers
@@ -48,7 +55,7 @@ class Instruction(Node):
         time_regex = r'\d.*(second|hour|minute)s?'
         match = re.search(time_regex, instruction_sent)
         if match:
-            return match.group(0)
+            return match.group()
 
     def __get_word_stem(self, word: str):
         return stemmer.stem(re.search(r'[A-Za-z]*', word).group(0))
