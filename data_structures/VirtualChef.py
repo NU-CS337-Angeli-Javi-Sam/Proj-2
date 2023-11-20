@@ -143,7 +143,7 @@ class VirtualChef:
             if variation in match:
                 new_variation = variation
                 #Changes not stacking, possibly a problem with recipe_data
-                recipe_data, recipe = substitute_recipe(variation, recipe_data, self.get_recipe())
+                recipe = substitute_recipe(variation, recipe_data, self.get_recipe())
 
         if recipe:
             self.set_recipe(recipe)

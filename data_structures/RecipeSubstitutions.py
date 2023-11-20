@@ -86,7 +86,7 @@ def substitute_recipe(variation, recipe_data, recipe):
     recipe = None
     if new_recipe_data:
         recipe = create_recipe(new_recipe_data)
-    return new_recipe_data, recipe
+    return recipe
 
 def __substitute_ingredients(variation_dict, old_ingredients_dict, recipe_data):
     #https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe
