@@ -30,21 +30,21 @@ class Instruction(Node):
     def __set_done_criterion(self, instruction_sent: str):
         done_regex = r'until [A-Za-z\s]*'
         match = re.search(done_regex, instruction_sent.lower())
-        if match: 
+        if match:
             return match.group()
 
     def __set_temp(self, instruction_sent: str):
         # Prioritize temperatures listed as numbers
         temp_regex = r'\d.*(°|degree)s?(C|F| Celsius| Fahrenheit)?'
         match = re.search(temp_regex, instruction_sent.lower())
-        if match: 
+        if match:
             return match.group()
 
         # If no numbers found, just get "heat"-like word(s)
         else:
             temp_word_regex = r'((high|low|medium|no|medium-low|medium-high|steady|rapid|moderate) )?heat'
             match = re.search(temp_word_regex, instruction_sent.lower())
-            if match: 
+            if match:
                 return match.group()
 
         return None
@@ -111,6 +111,9 @@ class Instruction(Node):
 
     def get_temp(self) -> str:
         return self.__temperature
+
+    def get_done_criterion(self) -> str:
+        return self.__done_criterion
 
     def __str__(self) -> str:
         output = f"{self.get_instruction()}\n\n"

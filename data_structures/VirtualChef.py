@@ -43,11 +43,11 @@ class VirtualChef:
 
             if match != None:
                 if context == 'navigation':
-                    response = self.__handle_navigation_utterance(match.string)
+                    response = self.__handle_navigation_utterance(match.group(0))
                 elif context == 'meta':
-                    response = self.__handle_meta_utterance(match.string)
+                    response = self.__handle_meta_utterance(match.group(0))
                 elif context == 'transformation':
-                    response = self.__handle_transformation_utterance(match.string, recipe_data)
+                    response = self.__handle_transformation_utterance(match.group(0), recipe_data)
                 elif context == 'query':
                     response = self.__handle_query_utterance(match.string, utterance)
                 elif context == 'generic':
@@ -118,11 +118,11 @@ class VirtualChef:
 
         #All Steps
         elif 'step' in match:
-            response += str(self.get_recipe().get_instructions())
+            response += f"{str(self.get_recipe().get_instructions())}\n\n"
 
         #Recipe Name
         elif 'name' in match and 'recipe' in match:
-            response += self.get_recipe().get_name()
+            response += f"{self.get_recipe().get_name()}\n\n"
 
         return response
 
@@ -160,14 +160,35 @@ class VirtualChef:
         response = ''
 
         #Parameters
-        if 'how long' in match or "when is" in match:
-            time = self.get_curr_instruction().get_time()
+        if "when" in match:
+            response += "Timing is crucial in the kitchen, my friend. For this step, it's all about precision. Now, let me tell you, there's no one-size-fits-all answer; it depends on the dish and the technique. Keep a watchful eye, trust your instincts, and don't rush the process.\n\n"
+
+            if "until" in self.get_curr_instruction().get_instruction():
+                print("PRINT HERE")
+                stopping_criterion = self.get_curr_instruction().get_done_criterion()
+
+                if stopping_criterion:
+                    response += f"Do this step until {stopping_criterion}.\n"
+                else:
+                    response = 'Do this for as long as you need to. There is no explicit amount.\n'
+            else:
+                time = self.get_curr_instruction().get_time()
+
+                if time:
+                    response += f"Do this step for about {time}.\n"
+                else:
+                    response = 'Fortunately, there is no time requirement at this step.\n'
+        elif 'how long' in match:
 
             response += "Timing is crucial in the kitchen, my friend. For this step, it's all about precision. Now, let me tell you, there's no one-size-fits-all answer; it depends on the dish and the technique. Keep a watchful eye, trust your instincts, and don't rush the process.\n\n"
+
+
+            time = self.get_curr_instruction().get_time()
+
             if time:
-                response += f"Do this step for about {time}."
+                response += f"Do this step for about {time}.\n"
             else:
-                response = 'Fortunately, there is no time requirement at this step.'
+                response = 'Fortunately, there is no time requirement at this step.\n'
 
         # need to test still
         elif 'what temp' in match or 'how hot' in match or 'how cold' in match:
