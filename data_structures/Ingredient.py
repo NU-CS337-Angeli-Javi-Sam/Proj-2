@@ -28,7 +28,7 @@ class Ingredient:
         self.__original_text = ingredient_sent
         self.__full_name = self.__set_full_name(ingredient_sent)
         self.__simplified_name = self.__set_simplified_name()
-       
+
         # Amount logic
         self.__quantity = self.__set_quantity(ingredient_sent)
 
@@ -51,7 +51,7 @@ class Ingredient:
         if not match:
             match = re.search(r'[A-Za-z\s]+', ingredient_sent)
             long_name_str = match.group().strip()
-        
+
         return long_name_str
 
     def __set_simplified_name(self):
@@ -64,7 +64,7 @@ class Ingredient:
 
         if not simplified_name_str:
             simplified_name_str = self.get_full_name()
-        
+
         return simplified_name_str
 
     def __set_qualities(self, ingredient_sent):
@@ -89,7 +89,7 @@ class Ingredient:
     def __set_quantity(self, ingredient_sent):
         normalized_sent = unicodedata.normalize('NFKC', ingredient_sent)
         quantity_str = ""
-        
+
         for measurement in measurements.categories.keys():
             measurement_regex = f'\d+.*{measurement}'
             match = re.search(measurement_regex, normalized_sent)
@@ -97,11 +97,13 @@ class Ingredient:
             if match:
                 quantity_str = match.group()
                 break
-        
+
         if not match:
             match = re.search(r'\d+', normalized_sent)
-            quantity_str = match.group() + " item(s)" 
-        
+            # print(match1.group())
+            if match:
+                quantity_str = f"{match.group()} item(s)"
+
         return quantity_str
 
     def get_original_text(self):
