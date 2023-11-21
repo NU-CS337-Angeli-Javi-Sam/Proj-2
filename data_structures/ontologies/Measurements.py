@@ -16,7 +16,7 @@ class MeasurementsOntology:
         self.categories = {
             "hour": ["hr", "hr.", "hour", "hours"],
             "minute": ["min.", "min", "minutes", "minute"],
-            "inch": ["\"\"", "in.", "inch", "in", "inches"],
+            "inch": ["\"\"", "in.", "inch", "inches"],
             "tablespoon": ["tbsp.", "Tbsp.", "Tb.", "T.", "tablespoon"],
             "teaspoon": ["tsp.", "ts.", "teaspoon"],
             "ounce": ["oz.", "ozs.", "ounce"],

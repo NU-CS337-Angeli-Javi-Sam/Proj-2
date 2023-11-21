@@ -39,10 +39,9 @@ class Instruction(Node):
         match = re.search(temp_regex, instruction_sent.lower())
         if match:
             return match.group()
-
         # If no numbers found, just get "heat"-like word(s)
         else:
-            temp_word_regex = r'((high|low|medium|no|medium-low|medium-high|steady|rapid|moderate) )?heat'
+            temp_word_regex = r'(over (high|low|medium|no|medium-low|medium-high|steady|rapid|moderate))|((high|low|medium|no|medium-low|medium-high|steady|rapid|moderate) heat)'
             match = re.search(temp_word_regex, instruction_sent.lower())
             if match:
                 return match.group()

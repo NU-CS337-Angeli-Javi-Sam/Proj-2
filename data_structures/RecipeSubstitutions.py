@@ -46,7 +46,7 @@ categories = {
     'mexican': {
     },
     'metric': {
-        ("\" ", " in. ", " inch ", " in ", " inches "): " centimeter ",  # Centimeters
+        ("\" ", " in. ", " inch ", " inches "): " centimeter ",  # Centimeters
         (" oz. ", " ozs. ", " ounce ", ' ounces ', ' oz '): ' gram ',  # Grams
         (" lb. ", " lbs. ", " pound "): " Kilogram ",  # Kilograms
         (" F ", " Fahrenheit ", " fahrenheit ", " f "): " celsius ",  # Celcius
