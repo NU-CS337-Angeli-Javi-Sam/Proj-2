@@ -7,20 +7,6 @@ from utils.create_recipe import create_recipe
 import random
 import re
 
-"""
-    Food Categories:
-            "Fruits"
-            "Vegetables"
-            "Proteins"
-            "Grains"
-            "Dairy"
-            "Herbs and Spices"
-            "Oils and Condiments"
-            "Canned and Packaged"
-            "Nuts and Seeds"
-            "Sweets and Desserts"
-"""
-
 ingredientOnt = IngredientOntology()
 
 categories = {
@@ -45,8 +31,13 @@ categories = {
         "Proteins": ['chicken', 'beef', 'lamb', 'mackerel', 'salmon', 'tilapia', 'tuna'],
         'Liquor': ['broth']
     },
-    # 'healthy': {
-    # },
+    'healthy': {
+            "Proteins" : ' low-fat ',
+            "Grains" : ' gluten-free ',
+            "Dairy" : ' low-fat ',
+            "Oils and Condiments" : ' low-fat ',
+            "Sweets and Desserts" : ' low-sugar '
+    },
     'mexican': {
         "Vegetables": ['tomato', 'bell pepper', 'jalapeno', 'poblano', 'habanero'],
         "Proteins": ['chorizo', 'al pastor', 'carne asada'],
@@ -54,9 +45,9 @@ categories = {
     },
     #Official unit name placed at beginning of the list
     'metric': {
-        (" inch ", "\" ", " in. ", " inches "): " centimeter ",  # Centimeters
-        (" ounce ", " oz. ", " ozs. ", ' ounces ', ' oz '): ' gram ',  # Grams
-        (" pound ", " lb. ", " lbs. ", " pounds "): " kilogram ",  # Kilograms
+        (" inch ", "\" ", " in. ", " inches ", "-inch ", "-in. "): " centimeter ",  # Centimeters
+        (" ounce ", " oz. ", " ozs. ", ' ounces ', ' oz ', "-ounce ", "-oz. "): ' gram ',  # Grams
+        (" pound ", " lb. ", " lbs. ", " pounds ", "-pound ", "-lb. "): " kilogram ",  # Kilograms
         (" fahrenheit ", " fahrenheit ", " F ", " f "): " celsius ",  # Celcius
     },
     'imperial': {
@@ -67,44 +58,44 @@ categories = {
     }
 }
 
-def __convertNumber(to_measurement, old_number):
+def __convertNumber(goal_measurement, old_number):
     #The measurement_type received is the measurement we are changing to,
     #assume that the number we get needs to be changed to it the measurement type we have
-    number = 0
+    new_number = 0
 
     #Temperature:
     # C -> F: (C × 9/5) + 32 = F
-    if to_measurement == 'fahrenheit':
-        number = (old_number * 9 / 5) + 32
+    if goal_measurement == 'fahrenheit':
+        new_number = (old_number * 9 / 5) + 32
     # F -> C: (F − 32) × 5 / 9 = C
-    elif to_measurement == 'celsius':
-        number = (old_number - 32) * 5 / 9
+    elif goal_measurement == 'celsius':
+        new_number = (old_number - 32) * 5 / 9
 
     #Inches/Centimeters
     # Cm -> In : cm / 2.54
-    elif to_measurement == 'inch':
-        number = old_number / 2.54
+    elif goal_measurement == 'inch':
+        new_number = old_number / 2.54
     # In -> Cm : in * 2.54
-    elif to_measurement == 'centimeter':
-        number = old_number * 2.54
+    elif goal_measurement == 'centimeter':
+        new_number = old_number * 2.54
 
     #Ounces/Grams
     # G -> Oz : g / 28.35
-    elif to_measurement == 'ounce':
-        number = old_number / 28.35
+    elif goal_measurement == 'ounce':
+        new_number = old_number / 28.35
     # Oz -> G : oz * 28.35
-    elif to_measurement == 'gram':
-        number = old_number * 28.35
+    elif goal_measurement == 'gram':
+        new_number = old_number * 28.35
 
     #Pounds/Kilograms
     # kg -> lb : kg * 2.205
-    elif to_measurement == 'pound':
-        number = old_number * 2.205
+    elif goal_measurement == 'pound':
+        new_number = old_number * 2.205
     # lb -> kg : lb / 2.205
-    elif to_measurement == 'kilogram':
-        number = old_number / 2.205
+    elif goal_measurement == 'kilogram':
+        new_number = old_number / 2.205
 
-    return round(number, 2)
+    return round(new_number, 2)
 
 def substitute_recipe(variation, recipe_data, recipe):
     # Get the variation requested by the user and format it for our categories dictionary
@@ -134,10 +125,15 @@ def substitute_recipe(variation, recipe_data, recipe):
         recipe = create_recipe(new_recipe_data)
     return recipe
 
+
+# Fix the 's' and 'es' stuff
+# Fix the chicken broth problem
 def __substitute_ingredients(variation_dict, old_ingredients_dict, recipe_data):
     #https://www.epicurious.com/recipes/food/views/mashed-potatoes-recipe
 
     new_recipe_data = copy.deepcopy(recipe_data)
+
+    #list(dict_test.keys())[list(dict_test.values()).index('bear')]
 
     #New dictionary mapping old ingredients to their replacement
     new_ingredients_dict = {}
@@ -148,30 +144,24 @@ def __substitute_ingredients(variation_dict, old_ingredients_dict, recipe_data):
         # Get an ingredient of the same category as the old ingredient
         category = ingredientOnt.get_category(k)
 
-        # print(k)
-        if category in variation_dict:
-            #If the ingredient isn't accepted by our variation, i.e it doesn't appear under a variation_dict category
-            #Map all ingredients to their replacement, randomly choose an integer
-            if k in variation_dict[category]:
-                replacement = k
-            else:
-                max_int = len(variation_dict[category])
-                replacement = variation_dict[category][random.randint(0, max_int)-1]
+        if list(categories.keys())[list(categories.values()).index(variation_dict)] == 'healthy':
+            if category in variation_dict:
+                replacement = variation_dict[category] + k
 
             new_ingredients_dict[(v.get_full_name(), k)] = replacement
+        else:
+            # print(k)
+            if category in variation_dict:
+                #If the ingredient isn't accepted by our variation, i.e it doesn't appear under a variation_dict category
+                #Map all ingredients to their replacement, randomly choose an integer
+                if k in variation_dict[category]:
+                    replacement = k
+                else:
+                    max_int = len(variation_dict[category])
+                    replacement = variation_dict[category][random.randint(0, max_int)-1]
 
-        category = ingredientOnt.get_category(k)
+                new_ingredients_dict[(v.get_full_name(), k)] = replacement
 
-        if category in variation_dict:
-            # If the ingredient isn't accepted by our variation, i.e it doesn't appear under a variation_dict category
-            # Map all ingredients to their replacement, randomly choose an integer
-            if k in variation_dict[category]:
-                replacement = k
-            else:
-                max_int = len(variation_dict[category])
-                replacement = variation_dict[category][random.randint(0, max_int) - 1]
-
-            new_ingredients_dict[(v.get_full_name(), k)] = replacement
     #Replace all instances of ingredient in recipeIngredient
     for index, instance in enumerate(new_recipe_data['recipeIngredient']):
 
@@ -193,10 +183,6 @@ def __substitute_ingredients(variation_dict, old_ingredients_dict, recipe_data):
 
     return new_recipe_data
 
-
-# Fix the 's' and 'es' stuff
-# Add 'low fat', 'low carb, 'gluten free' and others for healthy
-
 def __substitute_measurements(variation_dict, recipe_data):
     new_recipe_data = copy.deepcopy(recipe_data)
 
@@ -213,16 +199,33 @@ def __substitute_measurements(variation_dict, recipe_data):
                     #kilo is saved here
                     changed_measurements.append(replacement.replace(' ', ''))
 
+        #Check if any measurements changed
         if changed_measurements:
             instance_words = instance.split()
-            for to_measurement in changed_measurements:
-                i = instance_words.index(to_measurement)
-                try:
-                    if i - 1 >= 0 and unicodedata.normalize('NFKC', instance_words[i - 1])[0].isdigit():
-                        old_number = eval(unicodedata.normalize('NFKC', instance_words[i - 1]).replace('⁄', '/'))
-                        instance_words[i-1] = str(__convertNumber(to_measurement, old_number))
-                except Exception as e:
-                    continue
+
+            #For every measurement changed, look for its place in the instance sentence
+            for goal_measurement in changed_measurements:
+                i = instance_words.index(goal_measurement)
+
+                #Check if there's a number before our measurement unit
+                old_number = unicodedata.normalize('NFKC', instance_words[i - 1])
+                if i - 1 >= 0 and old_number[0].isdigit():
+                    #If its all numbers convert it
+                    if old_number.isdigit():
+                        instance_words[i - 1] = str(__convertNumber(goal_measurement, int(old_number)))
+                    else:
+                        # If its not all numbers but has a '/' in it, it might be a fraction
+                        old_number = old_number.replace('⁄', '/')
+
+                        if '/' in old_number:
+                            instance_words[i - 1] = str(__convertNumber(goal_measurement, eval(old_number)))
+                        elif 'x' in old_number:
+                            # If its not a all numbers, but has an 'x' in it, convert the number separate as it might be a 'by' measurement
+                            old_number = old_number.split('x')
+                            old_number[0] = str(__convertNumber(goal_measurement, int(old_number[0])))
+                            old_number[2] = str(__convertNumber(goal_measurement, int(old_number[2])))
+
+                            old_number = "".join(old_number)
 
             instance = " ".join(instance_words)
 
@@ -232,7 +235,6 @@ def __substitute_measurements(variation_dict, recipe_data):
     for index, instance in enumerate(new_recipe_data['recipeInstructions']):
         changed_measurements = []
         for measurements, replacement in variation_dict.items():
-
             for measure in measurements:
                 if measure in instance['text']:
                     instance['text'] = instance['text'].replace(measure, replacement)
@@ -241,17 +243,36 @@ def __substitute_measurements(variation_dict, recipe_data):
                     # kilo is saved here
                     changed_measurements.append(replacement.replace(' ', ''))
 
+        # Check if any measurements changed
         if changed_measurements:
             instance_words = instance['text'].split()
-            for to_measurement in changed_measurements:
-                indices = [i for i, v in enumerate(instance_words) if v == to_measurement]
+
+            # For every measurement changed, look for its place in the instance sentence
+            for goal_measurement in changed_measurements:
+                indices = [i for i, v in enumerate(instance_words) if v == goal_measurement]
+
                 for i in indices:
-                    try:
-                        if i - 1 >= 0 and unicodedata.normalize('NFKC', instance_words[i - 1])[0].isdigit():
-                            old_number = eval(unicodedata.normalize('NFKC', instance_words[i - 1]).replace('⁄', '/'))
-                            instance_words[i - 1] = str(__convertNumber(to_measurement, old_number))
-                    except Exception as e:
-                        continue
+                    # Check if there's a number before our measurement unit
+                    old_number = unicodedata.normalize('NFKC', instance_words[i - 1])
+                    if i - 1 >= 0 and old_number[0].isdigit():
+                        # If its all numbers convert it
+                        if old_number.isdigit():
+                            instance_words[i - 1] = str(__convertNumber(goal_measurement, int(old_number)))
+                        else:
+                            # If its not all numbers but has a '/' in it, it might be a fraction
+                            old_number = old_number.replace('⁄', '/')
+
+                            if '/' in old_number:
+                                instance_words[i - 1] = str(__convertNumber(goal_measurement, eval(old_number)))
+                            elif 'x' in old_number:
+                                # If its not a all numbers, but has an 'x' in it, convert the number separate as it might be a 'by' measurement
+                                old_number = old_number.split('x')
+
+                                old_number[0] = str(__convertNumber(goal_measurement, int(old_number[0])))
+                                old_number[1] = str(__convertNumber(goal_measurement, int(old_number[1])))
+
+                                old_number = "x".join(old_number)
+                                instance_words[i - 1] = old_number
 
             instance['text'] = " ".join(instance_words)
 
