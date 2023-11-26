@@ -64,6 +64,9 @@ class VirtualChef:
 
         #Direction
         if 'next' in match:
+            if self.get_curr_step() + 1 == self.get_recipe().get_instruction_count():
+                response = "break"
+                return response
             response = self.get_next_instruction()
         elif 'back' in match or 'previous' in match or 'prev' in match:
             response = self.get_prev_instruction()
