@@ -13,8 +13,7 @@ class VirtualChef:
         'navigation': [r'(go|take).*step.*', r'what is.*step.*', r'repeat', r'next', r'back'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
-        'transformation': [r'change', r'substitute', r'vegetarian', r'gluten.free', r'kosher', r'halal', r'indian',
-                            r'italian', r'mexican', r'imperial', r'metric', r'test'],
+        'transformation': [r'change', r'substitute', r'vegetarian', r'healthy', r'kosher', r'halal', r'mexican', r'imperial', r'metric', r'test'],
         'query': [r'what|how|when'],
         'generic': [r'thanks|okay|ok|ty|gotcha', r'thank you', '']
     }
