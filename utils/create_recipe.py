@@ -63,7 +63,7 @@ def replace_abbreviations(ingredient_sentence: str) -> str:
     - str: The updated ingredient sentence with full measurement terms replacing any abbreviations.
     """
 
-    ingredient_sentence_lst: List["str"] = ingredient_sentence.split(" ")
+    ingredient_sentence_lst: List["str"] = ingredient_sentence.replace("-", " ").split(" ")
 
     for i in range(len(ingredient_sentence_lst)):
         measurement: str = measurements.get_category(ingredient_sentence_lst[i])
@@ -172,8 +172,9 @@ def parse_recipe_instruction(
         instruction_text: str = instruction["text"]
 
         # Handle "Do Ahead:" in instructions
-        if len(instruction_text.split("\nDo Ahead: ")) == 2:
-            instruction_text, extra_note = instruction_text.split("\nDo Ahead: ")
+        if len(instruction_text.split("\nDo Ahead:")) == 2:
+            instruction_text, extra_note = instruction_text.split("\nDo Ahead:")
+            extra_note = extra_note.strip()
 
             # Remove Editor's note
             if len(extra_note.split("\n\nEditor's note: ")) == 2:
@@ -185,20 +186,26 @@ def parse_recipe_instruction(
             else:
                 recipe_prep_notes.append(extra_note)
 
-
-
         if len(instruction_text.split("\n\nEditor’s note: ")) == 2:
 
             instruction_text, _ = instruction_text.split("\n\nEditor’s note: ")
         elif len(instruction_text.split("\n\nEditor's note: ")) == 2:
-
-            instruction_text, _ = instruction_text.split("\n\nEditor's note: ")
+            instruction_text, _ = instruction_text.split("\n\nEditor's note: ")      
 
         instruction_text = replace_abbreviations(instruction_text)
 
         # instruction_text = replace_ingredients(recipe_ingredients, instruction_text)
 
         sentences: List["str"] = sent_tokenize(instruction_text)
+        # sentences: List["str"] = instruction_text.split(".")
+        # adjusted_sentences = []
+
+        # for i in range(len(sentences)):
+        #     if sentences[i].startswith("Don't") or sentences[i].startswith("Try"):
+        #         adjusted_sentences[i-1] += sentences[i]
+
+        #     sentences[i] = sentences[i].strip()
+        #     adjusted_sentences.append(sentences[i])
 
         for sentence in sentences:
             if re.search(r'^\(.*\)$', sentence) != None:
