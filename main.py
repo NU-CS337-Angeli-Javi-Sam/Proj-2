@@ -21,7 +21,7 @@ def prompt_user_for_recipe() -> None:
 
     return recipe_url
 
-def process_recipe(virtual_chef: VirtualChef, recipe_url: str) -> None:
+def process_recipe(recipe_url: str) -> None:
     """
     The main function to extract and process a recipe from a specific website.
 
@@ -72,9 +72,9 @@ def process_recipe(virtual_chef: VirtualChef, recipe_url: str) -> None:
     # print(recipe)
 
     # Provide the Virtual Chef the recipe to use
-    virtual_chef.set_recipe(recipe)
 
-    return recipe_data
+
+    return recipe_data, recipe
 
 def prompt_user_to_begin(virtual_chef: VirtualChef) -> None:
     recipe_name: str = virtual_chef.get_recipe().get_name()
@@ -118,7 +118,11 @@ def main():
     virtual_chef: VirtualChef = initialize_virtual_chef()
     recipe_url: str = prompt_user_for_recipe()
 
-    recipe_data = process_recipe(virtual_chef, recipe_url)
+    # AWS Call
+    recipe_data, recipe = process_recipe(recipe_url)
+    # End AWS Call
+
+    virtual_chef.set_recipe(recipe)
 
     response: str = prompt_user_to_begin(virtual_chef)
 
