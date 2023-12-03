@@ -41,7 +41,6 @@ def process_recipe(recipe_url: str) -> None:
     - Execute the 'main' function to fetch, extract, and process the recipe.
     """
 
-
     # Recipes to parse
     # ALL RECIPES MUST BE FROM https://www.epicurious.com/
     # url = 'https://www.epicurious.com/recipes/food/views/ba-syn-creamed-spinach-stuffed-meatloaf'
@@ -68,8 +67,6 @@ def process_recipe(recipe_url: str) -> None:
 
     # Creates a Recipe object from the provided recipe data
     recipe: Recipe = create_recipe(recipe_data)
-
-    # print(recipe)
 
     # Provide the Virtual Chef the recipe to use
 
