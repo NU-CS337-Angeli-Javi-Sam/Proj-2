@@ -122,6 +122,14 @@ Ontologies have another dictionary called `lexicon` that maps the ontologies' ca
 
 ### Instruction
 `Instructions` are a representation of nodes in the doubly-linked list that holds all of the instructions. It contains the full text of the recipe instruction, the tools used in this instruction, the ingredients used in this instruction, the cooking action performed in the instruction, the temperature at which this instruction is performed (if applicable), the duration at which this instruction is performed (if applicable), and finally, the done criterion at which this instruction is deemed completed (if applicable). We use these criteria to answer user queries regarding the instructions. 
+Ingredient is the data structure we use to collect meta data about each ingredient used in the recipe. Ingredient contains information about the quantity of an ingredient, the ingredient's full name and simplified name, e.g." Yukon Golden Potatoes" vs "Potatoes", as well as the units used to measurement an ingredient's quantity. This is done by running regular expressions over the raw ingredient text data to extract these features into respectively named fields. 
+
+These objects are collected into a dictionary mentioned below in Recipe object that maps ingredient names to their objects.
+
+### Instruction
+Instruction is the data structure we use to collect meta data about each step in the recipe. Instruction allows the virtual chef to answer questions about doneness, temperature, ingredients used in a step as well as the tools and cooking actions used within the step. These are all collected by running a set of regular expressions over the raw instruction text per instruction in the recipe. This allows us to separate things like the ingredients used, temperature, actions and tools into fields of the respective name. For more abstract descriptions of heat or doneness, e.g. "over high heat" or "until golden brown", we save these phrases directly and format them as sentences to be used by the Virutal Chef later on.
+
+These objects are collected into a doubly linked list mentioned below in the Recipe object.
 
 ### Recipe
 `Recipe` is an object that stores the name, ingredients, instructions, and tools used in the recipe. It is created after providing the URL and retrieving the HTML from Epicurious. The instructions are stored within a doubly-linked list, and the ingredients are in a dictionary (where the keys are the simplified name, if available). We then set the recipe within the Virtual Chef to be the `Recipe` object.
