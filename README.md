@@ -113,10 +113,14 @@ The idea of the ontologies was to give meaning to the most commmon words the bot
 Ontologies further have another dictionary called "lexicon" that reverses the above dictionaries to map the values to the key so given a specific word we can get the category it belongs too. Overall this helps us to find out what words mean in context and how words relate via their category relation.
 
 ### Ingredient
-TBD
+Ingredient is the data structure we use to collect meta data about each ingredient used in the recipe. Ingredient contains information about the quantity of an ingredient, the ingredient's full name and simplified name, e.g." Yukon Golden Potatoes" vs "Potatoes", as well as the units used to measurement an ingredient's quantity. This is done by running regular expressions over the raw ingredient text data to extract these features into respectively named fields. 
+
+These objects are collected into a dictionary mentioned below in Recipe object that maps ingredient names to their objects.
 
 ### Instruction
-TBD
+Instruction is the data structure we use to collect meta data about each step in the recipe. Instruction allows the virtual chef to answer questions about doneness, temperature, ingredients used in a step as well as the tools and cooking actions used within the step. These are all collected by running a set of regular expressions over the raw instruction text per instruction in the recipe. This allows us to separate things like the ingredients used, temperature, actions and tools into fields of the respective name. For more abstract descriptions of heat or doneness, e.g. "over high heat" or "until golden brown", we save these phrases directly and format them as sentences to be used by the Virutal Chef later on.
+
+These objects are collected into a doubly linked list mentioned below in the Recipe object.
 
 ### Recipe
 Recipe is a compilation of all relevant recipe items such as tools, ingredients and instructions. When the main.py function is called, it takes the recipe_data dictionary, the URL webpage data in dictionary form, and passes it into the create_recipe function. From here, the recipe_data dictionary's instructions text is broken down into a doubly linked list of instructions, the ingredients text is broken down into a dictionary mapping ingredient names to ingredient objects and finally the tools are stored as a list of tools.
