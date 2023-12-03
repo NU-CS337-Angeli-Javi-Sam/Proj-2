@@ -101,7 +101,7 @@ The logic breaks down like this, the user gives a command and based on the keywo
 
 handle_navigation_utterance handles commands related to switching between steps, it moves the step pointer up and changes the current instruction text to the next step in the instructions linked list.
 
-handle_meta_utterance handles commands about the recipe as a whole such as "show me all instructions" or "show me all ingredients
+handle_meta_utterance handles commands about the recipe as a whole such as "show me all instructions" or "show me all ingredients"
 
 handle_transformation_utterance handles transformation requests to turn recipe into any of the 6 variations we added to the virtual chef. This simply calls the substitute_recipe function in RecipeSubstitutes to create a new recipe using the old recipe virtual chef used to work on. 
 
