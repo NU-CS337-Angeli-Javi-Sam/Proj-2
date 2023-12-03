@@ -9,6 +9,8 @@ from data_structures.VirtualChef import VirtualChef
 
 from configparser import ConfigParser
 
+import pickle as pkl
+
 
 def initialize_virtual_chef() -> None:
     virtual_chef: VirtualChef = VirtualChef()
@@ -63,7 +65,7 @@ def api_fetch_recipe_from_website(baseurl: str, recipe_url: str):
 
     body = res.json()
 
-    recipe_webpage = body["webpage"]
+    recipe_webpage = body
 
     return recipe_webpage
 
@@ -98,7 +100,7 @@ def api_extract_recipe_data(baseurl: str, recipe_webpage: str):
 
     body = res.json()
 
-    recipe_data = body["recipe_data"]
+    recipe_data = body
 
     return recipe_data
 
@@ -133,9 +135,14 @@ def api_create_recipe_object(baseurl: str, recipe_data: Optional["Dict"]):
 
     body = res.json()
 
-    recipe_obj = body["recipe"]
+    datastr = body
 
-    return recipe_obj
+    base64_bytes = datastr.encode()
+    recipe_bytes = base64.b64decode(base64_bytes)
+    results = recipe_bytes.decode()
+    recipe = pkl.load(results)
+
+    return recipe
 
 def process_recipe(recipe_url: str, baseurl: str) -> None:
     """
