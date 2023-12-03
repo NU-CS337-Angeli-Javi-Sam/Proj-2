@@ -90,40 +90,43 @@ Upon running `main.py`, you will be prompted to enter a recipe URL into the chat
 If the command you provide is invalid for the current step, a generic response will be displayed.
 
 ## Rationale
-TBD
+For this project, we created a dependency parser (in line with the class suggestions) with the intent of using its output to create relevant objects and ontologies. However, we found out we could achieve similar results by re-implementing regex expressions similar to the first project. Therefore, our project uses regex expressions to perform the parsing of our recipes. Once our recipe has been parsed, we re-utilized regex expressions to identify commands the user wants to perform based on their utterances. After identifying which command the user provided, we use a set of handlers to give relevant responses to the user. This is the overall approach we took when implementing this program.
 
-### Virtual Chef 
-Parsing: TBD
 
-Virtual Chef is composed of a central function handle_utterance that takes in user input and using regular expressions determines what the user is asking for or commanding. In the terminal the user will be prompted to provide a recipe URL that then is used to created a Virtual Chef instance to read said recipe. From here the user has the freedom to interact with the Virtual Chef and ask it questions about the recipe as a whole or about the step they are on currently.
+in an object-oriented form of language processor. We created regex expressions (similar to project 1) to 
 
-The logic breaks down like this, the user gives a command and based on the keywords present in their response the handle_utterance will call a related function to handle that user's request:
 
-handle_navigation_utterance handles commands related to switching between steps, it moves the step pointer up and changes the current instruction text to the next step in the instructions linked list.
 
-handle_meta_utterance handles commands about the recipe as a whole such as "show me all instructions" or "show me all ingredients"
+ We did not end of using the dependency parser because by using simple r
 
-handle_transformation_utterance handles transformation requests to turn recipe into any of the 6 variations we added to the virtual chef. This simply calls the substitute_recipe function in RecipeSubstitutes to create a new recipe using the old recipe virtual chef used to work on. 
+### Initializing and Interacting with Virtual Chef
+Virtual Chef is composed of a central function `handle_utterance` that takes in user input and using regular expressions determines what the user is asking for or commanding. In the terminal, the user will be prompted to provide a recipe URL that is then used to create a Virtual Chef instance that parses said recipe. 
 
-Finally, handle_query_utterance handles questions related to a current recipe step and provides answers to inquiries about temperature, how long to cook an item and doneness. This also handles questions about ingredient descriptions or task explanations by providing YouTube links to videos.
+The recipes that can be provided are from the Epicurious website, which already formats its website such that scraping is not necessary. Instead, we grab the important information in the HTML code within the `recipe_data` object provided to the `create_recipe` function (see next section). For example, we grab the recipe ingredients and recipe steps. Using various ontologies (see next section), we determined what the actual ingredients, tools, cooking actions, measurements, and recipe substitutions were based on the ingredients and steps provided in the HTML code. We then used a recipe relationships ontology to tie the various cooking actions to tools and ingredients. During this process, we also created an `Ingredient` class that provided more specifications based on the qualities described in the HTML. We similarly did this for instructions, creating an `Instruction` class.
+
+Once all of the parsing was complete, the user has the freedom to interact with the Virtual Chef and ask it questions about the recipe as a whole or about the step they are on currently.
+
+Based on the user's command, we will call one of the following helper functions:
+* `handle_navigation_utterance` handles commands related to step navigation by the step pointer in our doubly-linked list.
+* `handle_meta_utterance` handles commands about the recipe as a whole, such as "show me all instructions" or "show me all ingredients."
+* `handle_transformation_utterance` handles requests to transform the recipe into any of the six variations programmed into the Virtual Chef. This handler calls the `substitute_recipe` function in `RecipeSubstitutes` to create a new recipe using the old recipe Virtual Chef used to work on. 
+* `handle_query_utterance` handles queries related to the current recipe step, such as temperature, duration, and doneness. This handler also generates queries for YouTube or Google based on user's commands, if applicable.
 
 ### Ontologies
-The idea of the ontologies was to give meaning to the most commmon words the bot would encounter in recipes. These ontologies include ingredients, cooking tools, cooking actions, and measurement names. Within each of these ontologies there are dictionaries mapping abstract depictions of tools, actions etc. to their instances for example: "Proteins": "Beef", "Chicken", etc. In Cooking Tools this is done from the tools specialization to tool instance, e.g. "Cutting Tools" : "knife", in Ingredients this is from food group to food, e.g. "Vegetables" : "Carrot", in cooking actions this is done from a action category to action words, e.g. "Heat" : "boil", and finally in measurements this is dictionary of units to their stem variations, e.g. "inch" : "in.", "inches", " " ".
+The idea of the ontologies was to give meaning to the most commmon words the bot would encounter in recipes. These ontologies include ingredients, cooking tools, cooking actions, and measurement names. Within each of these ontologies, there are dictionaries mapping abstract depictions of tools, actions, ingredients, measurements, and substitutions. For example, in the `Ingredients` ontology, there are categories such as "proteins," which has values like "beef" and "chicken."
 
-Ontologies further have another dictionary called "lexicon" that reverses the above dictionaries to map the values to the key so given a specific word we can get the category it belongs too. Overall this helps us to find out what words mean in context and how words relate via their category relation.
+Ontologies have another dictionary called `lexicon` that maps the ontologies' category values to category names. For example, if the `lexicon` contains the word "chicken," then the values will be mapped to "protein." Overall this helps us to find out what words mean in context and how words relate via their category relation.
 
 ### Ingredient
-TBD
+`Ingredient` is an object that stores the original text, full name (provided in the HTML), a simplified name without the extra descriptors (e.g. Yukon Gold potatoes will be turned into potatoes), a quantity (if provided), and qualities (if provided). We use these extra descriptors for the queries a user might give.
 
 ### Instruction
-TBD
+`Instructions` are a representation of nodes in the doubly-linked list that holds all of the instructions. It contains the full text of the recipe instruction, the tools used in this instruction, the ingredients used in this instruction, the cooking action performed in the instruction, the temperature at which this instruction is performed (if applicable), the duration at which this instruction is performed (if applicable), and finally, the done criterion at which this instruction is deemed completed (if applicable). We use these criteria to answer user queries regarding the instructions. 
 
 ### Recipe
-Recipe is a compilation of all relevant recipe items such as tools, ingredients and instructions. When the main.py function is called, it takes the recipe_data dictionary, the URL webpage data in dictionary form, and passes it into the create_recipe function. From here, the recipe_data dictionary's instructions text is broken down into a doubly linked list of instructions, the ingredients text is broken down into a dictionary mapping ingredient names to ingredient objects and finally the tools are stored as a list of tools.
+`Recipe` is an object that stores the name, ingredients, instructions, and tools used in the recipe. It is created after providing the URL and retrieving the HTML from Epicurious. The instructions are stored within a doubly-linked list, and the ingredients are in a dictionary (where the keys are the simplified name, if available). We then set the recipe within the Virtual Chef to be the `Recipe` object.
 
-From the recipe is used to create a Virtual Chef that reads the recipe as a it goes to provide the user with the instruction they need to cook with as well as other meta data.
+### RecipeSubsitutions
+We have a pre-selected list of recipe substitutions (e.g., "healthy," "halal", "kosher", "mexican", "metric", "imperial" or "vegetarian"). Based on the selection you chose, the Virtual Chef will call `substituteRecipe` in `RecipeSubstitutions.py` which will retrieve the relevant dictionary from the variation and alter the current `recipe_data` to reflect the change in the ingredients and steps.
 
-### RecipeSubsitution
-Substitution is when we take the ingredients or measurements from the recipe we are currently working on and current it to one of a few variations those being: "healthy", "halal", "kosher", "mexican", "metric", "imperial" or "vegetarian". Based on the selection you chose, the Virtual Chef will called substituteRecipe in RecipeSubstitutions.py which will retrieve the relevant dictionary from the variation and alter the current recipe_data to reflect the change in the ingredients and steps.
-
-For example, if you choose "vegetarian", substituteRecipe will retrieve the vegetarian dictionary which contains substitutions for food items labeled "Proteins" then it changes all the protein ingredients in the recipe_data ingredients and all their occurances in the recipe_data instructions list. The same would be done for "metric" or "imperial", the appropiate dictionary is chosen and all mentions of a unit are switched from metric to imperial or vice versa based on what was mentioned in the recipe_data as well as the measurement number itself. Finally a new recipe is created from the new recipe_data. This new recipe becomes the recipe that Virtual Chef runs.
+For example, if you choose "vegetarian", `substituteRecipe` will retrieve the vegetarian dictionary, which contains substitutions for food items labeled "Proteins," then it changes all the protein ingredients in the `recipe_data` ingredients and all its occurrances in the `recipe_data` instructions list. Finally a new recipe is created from the new `recipe_data.` This new recipe becomes the recipe that Virtual Chef runs.
