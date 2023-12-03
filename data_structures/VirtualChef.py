@@ -10,7 +10,7 @@ import re
 class VirtualChef:
     # Utterances keywords in regex
     contexts = {
-        'navigation': [r'(go|take).*step.*', r'what is.*step.*', r'repeat', r'next', r'back'],
+        'navigation': [r'(go|take).*step.*', r'what is.*step.*', r'repeat', r'next', r'back', r'prev'],
         'meta': [r'ingredients list', r'all.*ingredients', r'all.*tools', r'all.*utensils', r'all.*step',
                   r'name.*recipe', r'recipe.*name', r'ingredients', r'tools'],
         'transformation': [r'change', r'substitute', r'vegetarian', r'healthy', r'kosher', r'halal', r'mexican', r'imperial', r'metric', r'test'],
@@ -42,13 +42,13 @@ class VirtualChef:
 
             if match != None:
                 if context == 'navigation':
-                    response = self.__handle_navigation_utterance(match.group(0))
+                    response = self.__handle_navigation_utterance(match.group(0).lower())
                 elif context == 'meta':
-                    response = self.__handle_meta_utterance(match.group(0))
+                    response = self.__handle_meta_utterance(match.group(0).lower())
                 elif context == 'transformation':
-                    response = self.__handle_transformation_utterance(match.group(0), recipe_data)
+                    response = self.__handle_transformation_utterance(match.group(0),lower(), recipe_data)
                 elif context == 'query':
-                    response = self.__handle_query_utterance(match.string, utterance)
+                    response = self.__handle_query_utterance(match.string.lower(), utterance)
                 elif context == 'generic':
                     response = ''
 
@@ -166,11 +166,10 @@ class VirtualChef:
             response += "Timing is crucial in the kitchen, my friend. For this step, it's all about precision. Now, let me tell you, there's no one-size-fits-all answer; it depends on the dish and the technique. Keep a watchful eye, trust your instincts, and don't rush the process.\n\n"
 
             if "until" in self.get_curr_instruction().get_instruction():
-                print("PRINT HERE")
                 stopping_criterion = self.get_curr_instruction().get_done_criterion()
 
                 if stopping_criterion:
-                    response += f"Do this step until {stopping_criterion}.\n"
+                    response += f"Do this step {stopping_criterion}.\n"
                 else:
                     response = 'Do this for as long as you need to. There is no explicit amount.\n'
             else:
