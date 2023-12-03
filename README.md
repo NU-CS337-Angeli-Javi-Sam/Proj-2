@@ -59,8 +59,6 @@ These are potential commands you can use to interact with the chatbot and inquir
 
  	7. Questions about what an ingredient is or how to do a certain action will give you a response with a link to a YouTube explaining the action or ingredient.
 
-
-
 ## Rationale
 TBD
 
@@ -70,7 +68,9 @@ TBD
 Perhaps here we can go over a general overview of the parsing of the webpage and handle utterance function calling architecture we used.
 
 ### Ontologies
-TBD
+The idea of the ontologies was to give meaning to the most commmon words the bot would encounter in recipes. These ontologies include ingredients, cooking tools, cooking actions, and measurement names. Within each of these ontologies there are dictionaries mapping abstract depictions of tools, actions etc. to their instances for example: "Proteins": "Beef", "Chicken", etc. In Cooking Tools this is done from the tools specialization to tool instance, e.g. "Cutting Tools" : "knife", in Ingredients this is from food group to food, e.g. "Vegetables" : "Carrot", in cooking actions this is done from a action category to action words, e.g. "Heat" : "boil", and finally in measurements this is dictionary of units to their stem variations, e.g. "inch" : "in.", "inches", " " ".
+
+Ontologies further have another dictionary called "lexicon" that reverses the above dictionaries to map the values to the key so given a specific word we can get the category it belongs too. Overall this helps us to find out what words mean in context and how words relate via their category relation.
 
 ### Ingredient
 TBD
@@ -79,7 +79,11 @@ TBD
 TBD
 
 ### Recipe
-TBD
+Recipe is a compilation of all relevant recipe items such as tools, ingredients and instructions. When the main.py function is called, it takes the recipe_data dictionary, the URL webpage data in dictionary form, and passes it into the create_recipe function. From here, the recipe_data dictionary's instructions text is broken down into a doubly linked list of instructions, the ingredients text is broken down into a dictionary mapping ingredient names to ingredient objects and finally the tools are stored as a list of tools.
+
+From the recipe is used to create a Virtual Chef that reads the recipe as a it goes to provide the user with the instruction they need to cook with as well as other meta data.
 
 ### Substitution
-TBD
+Substitution is when we take the ingredients or measurements from the recipe we are currently working on and current it to one of a few variations those being: "healthy", "halal", "kosher", "mexican", "metric", "imperial" or "vegetarian". Based on the selection you chose, the Virtual Chef will called substituteRecipe in RecipeSubstitutions.py which will retrieve the relevant dictionary from the variation and alter the current recipe_data to reflect the change in the ingredients and steps.
+
+For example, if you choose "vegetarian", substituteRecipe will retrieve the vegetarian dictionary which contains substitutions for food items labeled "Proteins" then it changes all the protein ingredients in the recipe_data ingredients and all their occurances in the recipe_data instructions list. The same would be done for "metric" or "imperial", the appropiate dictionary is chosen and all mentions of a unit are switched from metric to imperial or vice versa based on what was mentioned in the recipe_data as well as the measurement number itself. Finally a new recipe is created from the new recipe_data. This new recipe becomes the recipe that Virtual Chef runs.
