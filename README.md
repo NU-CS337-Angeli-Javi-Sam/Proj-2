@@ -63,9 +63,19 @@ These are potential commands you can use to interact with the chatbot and inquir
 TBD
 
 ### Virtual Chef 
-TBD
+Parsing: TBD
 
-Perhaps here we can go over a general overview of the parsing of the webpage and handle utterance function calling architecture we used.
+Virtual Chef is composed of a central function handle_utterance that takes in user input and using regular expressions determines what the user is asking for or commanding. In the terminal the user will be prompted to provide a recipe URL that then is used to created a Virtual Chef instance to read said recipe. From here the user has the freedom to interact with the Virtual Chef and ask it questions about the recipe as a whole or about the step they are on currently.
+
+The logic breaks down like this, the user gives a command and based on the keywords present in their response the handle_utterance will call a related function to handle that user's request:
+
+handle_navigation_utterance handles commands related to switching between steps, it moves the step pointer up and changes the current instruction text to the next step in the instructions linked list.
+
+handle_meta_utterance handles commands about the recipe as a whole such as "show me all instructions" or "show me all ingredients
+
+handle_transformation_utterance handles transformation requests to turn recipe into any of the 6 variations we added to the virtual chef. This simply calls the substitute_recipe function in RecipeSubstitutes to create a new recipe using the old recipe virtual chef used to work on. 
+
+Finally, handle_query_utterance handles questions related to a current recipe step and provides answers to inquiries about temperature, how long to cook an item and doneness. This also handles questions about ingredient descriptions or task explanations by providing YouTube links to videos.
 
 ### Ontologies
 The idea of the ontologies was to give meaning to the most commmon words the bot would encounter in recipes. These ontologies include ingredients, cooking tools, cooking actions, and measurement names. Within each of these ontologies there are dictionaries mapping abstract depictions of tools, actions etc. to their instances for example: "Proteins": "Beef", "Chicken", etc. In Cooking Tools this is done from the tools specialization to tool instance, e.g. "Cutting Tools" : "knife", in Ingredients this is from food group to food, e.g. "Vegetables" : "Carrot", in cooking actions this is done from a action category to action words, e.g. "Heat" : "boil", and finally in measurements this is dictionary of units to their stem variations, e.g. "inch" : "in.", "inches", " " ".
@@ -83,7 +93,7 @@ Recipe is a compilation of all relevant recipe items such as tools, ingredients 
 
 From the recipe is used to create a Virtual Chef that reads the recipe as a it goes to provide the user with the instruction they need to cook with as well as other meta data.
 
-### Substitution
+### RecipeSubsitution
 Substitution is when we take the ingredients or measurements from the recipe we are currently working on and current it to one of a few variations those being: "healthy", "halal", "kosher", "mexican", "metric", "imperial" or "vegetarian". Based on the selection you chose, the Virtual Chef will called substituteRecipe in RecipeSubstitutions.py which will retrieve the relevant dictionary from the variation and alter the current recipe_data to reflect the change in the ingredients and steps.
 
 For example, if you choose "vegetarian", substituteRecipe will retrieve the vegetarian dictionary which contains substitutions for food items labeled "Proteins" then it changes all the protein ingredients in the recipe_data ingredients and all their occurances in the recipe_data instructions list. The same would be done for "metric" or "imperial", the appropiate dictionary is chosen and all mentions of a unit are switched from metric to imperial or vice versa based on what was mentioned in the recipe_data as well as the measurement number itself. Finally a new recipe is created from the new recipe_data. This new recipe becomes the recipe that Virtual Chef runs.
