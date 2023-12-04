@@ -39,13 +39,13 @@ def api_fetch_recipe_from_website(baseurl: str, recipe_url: str):
     api = "/fetch-recipe"
     url = baseurl + api
 
-    data = base64.b64encode(recipe_url)
-    datastr = data.decode()
+    # data = base64.b64encode(recipe_url)
+    # datastr = data.decode()
 
-    data = {"url": datastr}
+    data = {"url": recipe_url}
 
     try:
-        res = requests.post(url, data)
+        res = requests.post(url, json=data)
     except Exception as e:
         logging.error("api_fetch_recipe_from_website() failed:")
         logging.error("url: " + url)
@@ -64,6 +64,7 @@ def api_fetch_recipe_from_website(baseurl: str, recipe_url: str):
         return
 
     body = res.json()
+    # print(body)
 
     recipe_webpage = body
 
@@ -74,18 +75,20 @@ def api_extract_recipe_data(baseurl: str, recipe_webpage: str):
     api = "/extract-recipe-data"
     url = baseurl + api
 
-    data = base64.b64encode(recipe_webpage)
-    datastr = data.decode()
+    # data = base64.b64encode(recipe_webpage)
+    # datastr = data.decode()
 
-    data = {"webpage": datastr}
+    data = {"webpage": recipe_webpage}
 
+    print("Data")
     try:
-        res = requests.post(url, data)
+        res = requests.post(url, json=data)
     except Exception as e:
         logging.error("api_extract_recipe_data() failed:")
         logging.error("url: " + url)
         logging.error(e)
         return
+    print("response back")
 
     if res.status_code != 200:
         # failed:
@@ -99,6 +102,7 @@ def api_extract_recipe_data(baseurl: str, recipe_webpage: str):
         return
 
     body = res.json()
+    print("check body")
 
     recipe_data = body
 
@@ -109,10 +113,10 @@ def api_create_recipe_object(baseurl: str, recipe_data: Optional["Dict"]):
     api = "/create-recipe-object"
     url = baseurl + api
 
-    data = base64.b64encode(recipe_data)
-    datastr = data.decode()
+    # data = base64.b64encode(recipe_data)
+    # datastr = data.decode()
 
-    data = {"recipe_data": datastr}
+    data = {"recipe_data": recipe_data}
 
     try:
         res = requests.post(url, data)
@@ -178,12 +182,15 @@ def process_recipe(recipe_url: str, baseurl: str) -> None:
 
     recipe_webpage: Optional["str"] = api_fetch_recipe_from_website(baseurl, recipe_url)
 
+    print("fetching worked")
     if recipe_webpage == None:
         print("Something went wrong when fetching the webpage. Try again.")
         return
 
     # Extract relevant data from HTML
-    recipe_data: Optional["Dict"] = api_fetch_recipe_from_website(baseurl, recipe_webpage)
+    recipe_data: Optional["Dict"] = api_extract_recipe_data(baseurl, recipe_webpage)
+
+    print("extracting worked")
 
     if recipe_data == None:
         print("Something went wrong when parsing the HTML. Try again.")
@@ -191,6 +198,8 @@ def process_recipe(recipe_url: str, baseurl: str) -> None:
 
     # Creates a Recipe object from the provided recipe data
     recipe: Recipe = api_create_recipe_object(baseurl, recipe_data)
+
+    print("create worked")
 
     # Provide the Virtual Chef the recipe to use
 
